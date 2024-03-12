@@ -1,22 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
-import * as XLSX from "xlsx";
 import axios from "axios";
 import { format } from "date-fns";
 import { API } from "../../../utils/constants";
 import { sliceLeadDeleted } from "../../leads/leadSlice";
-import { openModal } from "../../common/modalSlice";
-import {
-  CONFIRMATION_MODAL_CLOSE_TYPES,
-  MODAL_BODY_TYPES,
-} from "../../../utils/globalConstantUtil";
 import { showNotification } from "../../common/headerSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
 import InputText from "../../../components/Input/InputText";
 
-function AllDematAccount() {
+function AllLinks() {
   const dispatch = useDispatch();
   const [leadData, setLeadData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
@@ -28,8 +21,6 @@ function AllDematAccount() {
     imageLink: "",
   });
 
-  // const leadDetails = JSON.parse(localStorage.getItem("lead-details"));
-  // console.log("lead details from local storage", leadDetails);
   const leadDeleted = useSelector((state) => state.lead.leadDeleted);
   const todayDate = new Date();
   const todayDateString = todayDate.toISOString().split("T")[0];
@@ -63,19 +54,6 @@ function AllDematAccount() {
     fetchData();
   }, [leadDeleted, todayDateString, dispatch]);
 
-  const deleteCurrentLead = (index) => {
-    dispatch(
-      openModal({
-        title: "Confirmation",
-        bodyType: MODAL_BODY_TYPES.CONFIRMATION,
-        extraObject: {
-          message: `Are you sure you want to delete this Account?`,
-          type: CONFIRMATION_MODAL_CLOSE_TYPES.ACCOUNT_DELETE,
-          index: index,
-        },
-      })
-    );
-  };
   const handleFilterChange = (e) => {
     setFilterValue(e.target.value);
   };
@@ -83,22 +61,9 @@ function AllDematAccount() {
   const filteredLeads = leadData?.filter((lead) => {
     return (
       lead?.name?.toLowerCase().includes(filterValue?.toLowerCase()) ||
-      lead?.link?.toLowerCase().includes(filterValue) ||
-      lead?.imageLink?.toLowerCase().includes(filterValue.toLowerCase()) ||
       lead?.commission?.toString().includes(filterValue)
     );
   });
-
-  const toggleEdit = (index) => {
-    setEditedData({
-      name: filteredLeads[index].name,
-      commission: filteredLeads[index].commission,
-      link: filteredLeads[index].link,
-      imageLink: filteredLeads[index].imageLink,
-    });
-
-    setCurrentlyEditing((prevIndex) => (prevIndex === index ? null : index));
-  };
 
   const handleSaveEdit = async (leadId, index) => {
     try {
@@ -166,93 +131,47 @@ function AllDematAccount() {
     setEditedData({ ...editedData, [updateType]: value });
   };
 
-  const convertDataToXLSX = (data) => {
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-    const blob = XLSX.write(wb, {
-      bookType: "xlsx",
-      mimeType:
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      type: "binary",
-    });
-
-    // Convert the binary string to a Blob
-    const blobData = new Blob([s2ab(blob)], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-
-    return blobData;
-  };
-
-  // Utility function to convert binary string to ArrayBuffer
-  const s2ab = (s) => {
-    const buf = new ArrayBuffer(s.length);
-    const view = new Uint8Array(buf);
-    for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-    return buf;
-  };
-
-  // Function to trigger the download
-  const downloadXLSX = (data) => {
-    const blob = convertDataToXLSX(data);
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "account_data.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleExportXLSX = async () => {
-    const baseURL = `${API}/commissions`;
+  const handleShareLink = async (link) => {
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        // Do something after successfully copying the text
+        console.log("Link copied successfully");
+      })
+      .catch((error) => {
+        // Handle any errors that may occur during the copy process
+        console.error("Error copying link:", error);
+      });
     try {
-      const response = await axios.get(baseURL);
-      if (response.status === 200) {
-        downloadXLSX(response.data);
+      if (navigator.share) {
+        await navigator.share({
+          title: document.title,
+          text: link,
+          url: window.location.href,
+        });
+        console.log("Link shared successfully");
       } else {
-        console.log("access token incorrect");
+        console.log("Web Share API not supported");
+        // Fallback for unsupported browsers
+        // You can provide your custom implementation for sharing here
       }
     } catch (error) {
-      if (error.response.status === 409) {
-        localStorage.clear();
-        window.location.href = "/login";
-      }
-      console.error("error", error);
+      console.error("Error sharing link:", error);
     }
   };
-
-  const TopSideButtons = ({ onExportXLSX }) => {
-    return (
-      <div className="flex-wrap gap-[10px] max-sm:mt-[10px] flex justify-center">
-        <button
-          className="btn px-6 btn-sm normal-case btn-primary"
-          onClick={onExportXLSX}
-        >
-          Export Account
-        </button>
-      </div>
-    );
-  };
-
   return (
     <>
       <div className="mb-4 flex items-center">
         <input
           type="text"
-          placeholder="Filter by Name or Commission or Link"
+          placeholder="Filter by Name or Commission"
           value={filterValue}
           onChange={handleFilterChange}
           className="input input-sm input-bordered  w-full max-w-xs"
         />
       </div>
 
-      <TitleCard
-        title={`All Accounts ${leadData?.length}`}
-        topMargin="mt-2"
-        TopSideButtons={<TopSideButtons onExportXLSX={handleExportXLSX} />}
-      >
+      <TitleCard title={`All Accounts ${leadData?.length}`} topMargin="mt-2">
         {filteredLeads?.length === 0 ? (
           <p>No Data Found</p>
         ) : (
@@ -268,8 +187,6 @@ function AllDematAccount() {
 
                     <th>Commission</th>
                     <th>Account Link</th>
-                    <th>Image Link</th>
-                    {/* <th>Assignee Status</th> */}
 
                     <th className="text-center">Action</th>
                   </tr>
@@ -291,7 +208,7 @@ function AllDematAccount() {
                             ? format(new Date(l?.createdAt), "dd/MM/yyyy")
                             : "N/A"}
                         </td>
-                        <td  style={{ maxWidth: "7rem" }}>
+                        <td>
                           {currentlyEditing === k ? (
                             <InputText
                               defaultValue={editedData.name}
@@ -303,7 +220,7 @@ function AllDematAccount() {
                             l.name
                           )}
                         </td>
-                        <td style={{ maxWidth: "7rem" }}>
+                        <td>
                           {currentlyEditing === k ? (
                             <InputText
                               defaultValue={editedData.commission}
@@ -315,64 +232,24 @@ function AllDematAccount() {
                             l.commission
                           )}
                         </td>
-                        <td style={{ maxWidth: "7rem" }}>
-                          <div className="max-w-6 overflow-hidden truncate">
-                            {currentlyEditing === k ? (
-                              <InputText
-                                defaultValue={editedData.link}
-                                updateType="link"
-                                //   containerStyle="mt-4"
-                                updateFormValue={updateFormValue}
-                              />
-                            ) : (
-                              l.link
-                            )}
-                          </div>
+                        <td>
+                          <button
+                            className="btn px-6 btn-sm normal-case btn-success"
+                            onClick={() => {
+                              handleShareLink(l.link);
+                            }}
+                          >
+                            Share
+                          </button>
                         </td>
-                        <td style={{ maxWidth: "7rem" }}>
-                          <div className=" overflow-hidden truncate">
-                            {currentlyEditing === k ? (
-                              <InputText
-                                defaultValue={editedData.imageLink}
-                                updateType="imageLink"
-                                updateFormValue={updateFormValue}
-                              />
-                            ) : (
-                              l.imageLink
-                            )}
-                          </div>
-                        </td>
-
                         {/* <td>{l.assigneeStatus}</td> */}
                         <td>
-                          <div className="flex item-center justify-between">
-                            {currentlyEditing !== k ? (
-                              <button
-                                className="btn btn-square btn-ghost"
-                                onClick={() => deleteCurrentLead(l._id)}
-                              >
-                                <TrashIcon className="w-5" />
-                              </button>
-                            ) : (
-                              ""
-                            )}
-                            <div className="flex gap-3 items-center justify-center">
-                              {currentlyEditing === k && (
-                                <button
-                                  className="btn btn-square btn-ghost"
-                                  onClick={() => handleSaveEdit(l._id, k)}
-                                >
-                                  SAVE
-                                </button>
-                              )}
-                              <button
-                                className="btn btn-square btn-ghost"
-                                onClick={() => toggleEdit(k)}
-                              >
-                                {currentlyEditing === k ? "Cancel" : "Edit"}
-                              </button>
-                            </div>
-                          </div>
+                          <button
+                            className="btn px-6 btn-sm normal-case btn-primary"
+                            onClick={() => handleSaveEdit(l._id, k)}
+                          >
+                            Submit Account
+                          </button>
                         </td>
                       </tr>
                     );
@@ -387,4 +264,4 @@ function AllDematAccount() {
   );
 }
 
-export default AllDematAccount;
+export default AllLinks;

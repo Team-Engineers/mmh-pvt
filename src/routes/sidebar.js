@@ -47,14 +47,19 @@ if (user?.approvedAt && !isAdmin && user?.role?.includes("HR")) {
       name: "Today's Leads",
     },
     {
-      path: "/app/closedLeads",
-      icon: <CheckBadgeIcon className={iconClasses} />,
-      name: "Closed Leads",
+      path: "/app/allLinks",
+      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      name: "All Links",
     },
     {
       path: "/app/previousLeads",
       icon: <BanknotesIcon className={iconClasses} />,
       name: "Previous Leads",
+    },
+    {
+      path: "/app/closedLeads",
+      icon: <CheckBadgeIcon className={iconClasses} />,
+      name: "Closed Leads",
     }
   );
 }
