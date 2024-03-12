@@ -7,6 +7,8 @@ const Page404 = lazy(() => import("../pages/protected/404"));
 const Leads = lazy(() => import("../pages/protected/Leads"));
 const OpenLeads = lazy(() => import("../pages/protected/OpenLeads"));
 const AllLinks = lazy(() => import("../features/user/Account/AllLinks"));
+const SubmitAccount = lazy(() => import("../features/user/Account/SubmitAccount"));
+
 
 const ClosedLeads = lazy(() => import("../pages/protected/ClosedLeads"));
 const NotCalledLeads = lazy(() => import("../pages/protected/NotCalledLeads"));
@@ -173,6 +175,11 @@ if (isAdmin) {
     {
       path: "/allLinks",
       component: AllLinks,
+    },
+
+    {
+      path: "/createForm/:id",
+      component: SubmitAccount,
     },
     {
       path: "/closedLeads",

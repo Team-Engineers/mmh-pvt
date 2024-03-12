@@ -8,6 +8,7 @@ import { sliceLeadDeleted } from "../../leads/leadSlice";
 import { showNotification } from "../../common/headerSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
 import InputText from "../../../components/Input/InputText";
+import { Link } from "react-router-dom";
 
 function AllLinks() {
   const dispatch = useDispatch();
@@ -244,12 +245,12 @@ function AllLinks() {
                         </td>
                         {/* <td>{l.assigneeStatus}</td> */}
                         <td>
-                          <button
+                          <Link
+                            to={`/app/createForm/${l._id}`}
                             className="btn px-6 btn-sm normal-case btn-primary"
-                            onClick={() => handleSaveEdit(l._id, k)}
                           >
                             Submit Account
-                          </button>
+                          </Link>
                         </td>
                       </tr>
                     );
