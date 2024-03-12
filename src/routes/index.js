@@ -38,6 +38,9 @@ const ProfileSettings = lazy(() =>
   import("../pages/protected/ProfileSettings")
 );
 const ForgotPassword = lazy(() => import("../pages/protected/ForgotPassword"));
+const DematAccount = lazy(() => import("../pages/protected/DematAccount"));
+const AllDematAccount = lazy(() => import("../features/settings/dematAccount/AllDematAccount"));
+
 const ActiveMembers = lazy(() => import("../pages/protected/ActiveMembers"));
 const NotApprovedMembers = lazy(() =>
   import("../pages/protected/NotApprovedMembers")
@@ -126,6 +129,15 @@ if (isAdmin) {
     {
       path: `/presentTeamLeaderHR/:teamLeaderId`,
       component: TeamLeaderPresentHR,
+    },
+
+    {
+      path: "/addAccount",
+      component: DematAccount,
+    },
+    {
+      path: "/allAccount",
+      component: AllDematAccount,
     },
     {
       path: "/addTL",

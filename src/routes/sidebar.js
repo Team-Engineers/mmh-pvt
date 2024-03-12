@@ -102,11 +102,11 @@ if (isAdmin) {
       name: "Fresh Leads",
     },
 
-    {
-      path: "/app/websiteLeads",
-      icon: <GlobeAltIcon className={iconClasses} />,
-      name: "Website Leads",
-    },
+    // {
+    //   path: "/app/websiteLeads",
+    //   icon: <GlobeAltIcon className={iconClasses} />,
+    //   name: "Website Leads",
+    // },
 
     {
       path: "/app/reset-password",
@@ -119,6 +119,17 @@ if (isAdmin) {
       name: "Present HR",
     },
 
+    {
+      path: "/app/addAccount",
+      icon: <RocketLaunchIcon className={submenuIconClasses} />,
+      name: "Add Account",
+    },
+
+    {
+      path: "/app/allAccount",
+      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      name: "All Account",
+    },
     {
       path: "/app/teamLeaders",
       icon: <RocketLaunchIcon className={submenuIconClasses} />,

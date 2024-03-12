@@ -70,7 +70,7 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
               Authorization: `Bearer ${accessToken}`,
             };
 
-           const response =  await axios.post(
+            const response = await axios.post(
               `${API}/lead/webLeadToLeads`,
               {},
               {
@@ -79,7 +79,12 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
             );
 
             dispatch(sliceLeadDeleted(true));
-            dispatch(showNotification({ message: `${response.data.message}`, status: 1 }));
+            dispatch(
+              showNotification({
+                message: `${response.data.message}`,
+                status: 1,
+              })
+            );
           }
         } else {
           dispatch(
@@ -88,7 +93,10 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
         }
       } catch (error) {
         dispatch(
-          showNotification({ message: `${error.response.data.message}`, status: 0 })
+          showNotification({
+            message: `${error.response.data.message}`,
+            status: 0,
+          })
         );
       }
     } else if (type === CONFIRMATION_MODAL_CLOSE_TYPES.DELETE_ALL_LEAD) {
@@ -103,13 +111,18 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
               Authorization: `Bearer ${accessToken}`,
             };
 
-           const response = await axios.delete(`${API}/lead/delete/bulk`, {
+            const response = await axios.delete(`${API}/lead/delete/bulk`, {
               headers,
               params: params,
             });
 
             dispatch(sliceLeadDeleted(true));
-            dispatch(showNotification({ message: `${response.data.message}`, status: 1 }));
+            dispatch(
+              showNotification({
+                message: `${response.data.message}`,
+                status: 1,
+              })
+            );
           }
         } else {
           dispatch(
@@ -118,7 +131,10 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
         }
       } catch (error) {
         dispatch(
-          showNotification({ message: `${error.response.data.message}`, status: 0 })
+          showNotification({
+            message: `${error.response.data.message}`,
+            status: 0,
+          })
         );
       }
     } else if (type === CONFIRMATION_MODAL_CLOSE_TYPES.LEAD_DELETE) {
@@ -137,7 +153,12 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
               headers,
             });
             dispatch(sliceLeadDeleted(true));
-            dispatch(showNotification({ message: `${response.data.message}`, status: 1 }));
+            dispatch(
+              showNotification({
+                message: `${response.data.message}`,
+                status: 1,
+              })
+            );
           }
         } else {
           dispatch(
@@ -146,7 +167,10 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
         }
       } catch (error) {
         dispatch(
-          showNotification({ message: `${error.response.data.message}`, status: 0 })
+          showNotification({
+            message: `${error.response.data.message}`,
+            status: 0,
+          })
         );
       }
     } else if (type === CONFIRMATION_MODAL_CLOSE_TYPES.MEMBER_DELETE) {
@@ -166,7 +190,10 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
             });
             dispatch(sliceMemberDeleted(true));
             dispatch(
-              showNotification({ message: `${response.data.message}`, status: 1 })
+              showNotification({
+                message: `${response.data.message}`,
+                status: 1,
+              })
             );
           }
         } else {
@@ -176,7 +203,46 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
         }
       } catch (error) {
         dispatch(
-          showNotification({ message: `${error.response.data.message}`, status: 0 })
+          showNotification({
+            message: `${error.response.data.message}`,
+            status: 0,
+          })
+        );
+      }
+    } else if (type === CONFIRMATION_MODAL_CLOSE_TYPES.ACCOUNT_DELETE) {
+      try {
+        const storedToken = localStorage.getItem("accessToken");
+
+        if (storedToken) {
+          const accessToken = JSON.parse(storedToken).token;
+
+          if (accessToken) {
+            const headers = {
+              Authorization: `Bearer ${accessToken}`,
+            };
+
+            const response = await axios.delete(`${API}/commissions/${index}`, {
+              headers,
+            });
+            dispatch(sliceLeadDeleted(true));
+            dispatch(
+              showNotification({
+                message: `${response.data.message}`,
+                status: 1,
+              })
+            );
+          }
+        } else {
+          dispatch(
+            showNotification({ message: "Access token not found", status: 0 })
+          );
+        }
+      } catch (error) {
+        dispatch(
+          showNotification({
+            message: `${error.response.data.message}`,
+            status: 0,
+          })
         );
       }
     }
