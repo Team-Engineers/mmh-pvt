@@ -245,6 +245,45 @@ function ConfirmationModalBody({ extraObject, closeModal }) {
           })
         );
       }
+    } else if (type === CONFIRMATION_MODAL_CLOSE_TYPES.COMMISSIONFORM_DELETE) {
+      try {
+        const storedToken = localStorage.getItem("accessToken");
+
+        if (storedToken) {
+          const accessToken = JSON.parse(storedToken).token;
+
+          if (accessToken) {
+            const headers = {
+              Authorization: `Bearer ${accessToken}`,
+            };
+
+            const response = await axios.delete(
+              `${API}/commissionForm/${index}`,
+              {
+                headers,
+              }
+            );
+            dispatch(sliceMemberDeleted(true));
+            dispatch(
+              showNotification({
+                message: `${response.data.message}`,
+                status: 1,
+              })
+            );
+          }
+        } else {
+          dispatch(
+            showNotification({ message: "Access token not found", status: 0 })
+          );
+        }
+      } catch (error) {
+        dispatch(
+          showNotification({
+            message: `${error.response.data.message}`,
+            status: 0,
+          })
+        );
+      }
     }
     closeModal();
   };

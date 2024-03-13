@@ -135,6 +135,13 @@ if (isAdmin) {
       icon: <GlobeAltIcon className={submenuIconClasses} />,
       name: "All Account",
     },
+
+    {
+      path: "/app/openedAccount",
+      icon: <RocketLaunchIcon className={submenuIconClasses} />,
+      name: "Opened Account",
+    },
+
     {
       path: "/app/teamLeaders",
       icon: <RocketLaunchIcon className={submenuIconClasses} />,

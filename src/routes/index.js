@@ -7,8 +7,9 @@ const Page404 = lazy(() => import("../pages/protected/404"));
 const Leads = lazy(() => import("../pages/protected/Leads"));
 const OpenLeads = lazy(() => import("../pages/protected/OpenLeads"));
 const AllLinks = lazy(() => import("../features/user/Account/AllLinks"));
-const SubmitAccount = lazy(() => import("../features/user/Account/SubmitAccount"));
-
+const SubmitAccount = lazy(() =>
+  import("../features/user/Account/SubmitAccount")
+);
 
 const ClosedLeads = lazy(() => import("../pages/protected/ClosedLeads"));
 const NotCalledLeads = lazy(() => import("../pages/protected/NotCalledLeads"));
@@ -44,6 +45,10 @@ const ForgotPassword = lazy(() => import("../pages/protected/ForgotPassword"));
 const DematAccount = lazy(() => import("../pages/protected/DematAccount"));
 const AllDematAccount = lazy(() =>
   import("../features/settings/dematAccount/AllDematAccount")
+);
+
+const OpenedAccount = lazy(() =>
+  import("../features/settings/dematAccount/OpenedAccount")
 );
 
 const ActiveMembers = lazy(() => import("../pages/protected/ActiveMembers"));
@@ -143,6 +148,10 @@ if (isAdmin) {
     {
       path: "/allAccount",
       component: AllDematAccount,
+    },
+    {
+      path: "/openedAccount",
+      component: OpenedAccount,
     },
     {
       path: "/addTL",

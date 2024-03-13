@@ -32,6 +32,7 @@ const SubmitAccount = () => {
     customerContact: "",
     hrName: user?.name,
     hrId: user?._id,
+    hrContact: user?.contact,
   };
   const [formData, setFormData] = useState(INITIAL_COMMISSION_OBJ);
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,11 +46,6 @@ const SubmitAccount = () => {
         const response = await axios.get(`${API}/commissions/${id}`);
         setCommission(response.data.commission);
         setName(response.data.name);
-
-        setFormData({
-          ...formData, // Spread the current state to ensure you don't lose other values
-          name: response.data.name,
-        });
       } catch (error) {
         if (error.response.status === 409) {
           localStorage.clear();
@@ -59,9 +55,7 @@ const SubmitAccount = () => {
       }
     };
     fetchCommissionData();
-  }, [id,formData]);
-
-  
+  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,6 +63,11 @@ const SubmitAccount = () => {
       ...prevData,
       [name]: value,
     }));
+
+    setFormData({
+      ...formData,
+      name: name,
+    });
   };
 
   const handleUpdate = async () => {
