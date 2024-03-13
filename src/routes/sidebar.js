@@ -52,6 +52,11 @@ if (user?.approvedAt && !isAdmin && user?.role?.includes("HR")) {
       name: "All Links",
     },
     {
+      path: "/app/openedAccList",
+      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      name: "Opened Account List",
+    },
+    {
       path: "/app/previousLeads",
       icon: <BanknotesIcon className={iconClasses} />,
       name: "Previous Leads",

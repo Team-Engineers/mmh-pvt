@@ -10,7 +10,9 @@ const AllLinks = lazy(() => import("../features/user/Account/AllLinks"));
 const SubmitAccount = lazy(() =>
   import("../features/user/Account/SubmitAccount")
 );
-
+const OpenedAccList = lazy(() =>
+  import("../features/user/Account/OpenedAccList")
+);
 const ClosedLeads = lazy(() => import("../pages/protected/ClosedLeads"));
 const NotCalledLeads = lazy(() => import("../pages/protected/NotCalledLeads"));
 
@@ -184,6 +186,10 @@ if (isAdmin) {
     {
       path: "/allLinks",
       component: AllLinks,
+    },
+    {
+      path: "/openedAccList",
+      component: OpenedAccList,
     },
 
     {

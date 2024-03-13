@@ -5,23 +5,13 @@ import axios from "axios";
 import { format } from "date-fns";
 import { API } from "../../../utils/constants";
 import { sliceLeadDeleted } from "../../leads/leadSlice";
-import { showNotification } from "../../common/headerSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
-import InputText from "../../../components/Input/InputText";
 import { Link } from "react-router-dom";
 
 function AllLinks() {
   const dispatch = useDispatch();
   const [leadData, setLeadData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
-  const [currentlyEditing, setCurrentlyEditing] = useState(null);
-  const [editedData, setEditedData] = useState({
-    name: "",
-    commission: "",
-    link: "",
-    imageLink: "",
-  });
-
   const leadDeleted = useSelector((state) => state.lead.leadDeleted);
   const todayDate = new Date();
   const todayDateString = todayDate.toISOString().split("T")[0];
@@ -36,7 +26,7 @@ function AllLinks() {
       try {
         const response = await axios.get(baseURL, { params: params });
         if (response.status === 200) {
-          console.log("response data of commision", response.data);
+          // console.log("response data of commision", response.data);
           // localStorage.setItem("lead-details", JSON.stringify(response.data));
           setLeadData(response.data);
         } else {
@@ -65,72 +55,6 @@ function AllLinks() {
       lead?.commission?.toString().includes(filterValue)
     );
   });
-
-  const handleSaveEdit = async (leadId, index) => {
-    try {
-      // Validate edited data (you can add more validation as needed)
-      if (
-        !editedData.name ||
-        !editedData.commission ||
-        !editedData.link ||
-        !editedData.imageLink
-      ) {
-        dispatch(
-          showNotification({
-            message: "All fields are required.",
-            status: 0,
-          })
-        );
-        return;
-      }
-      const tokenResponse = localStorage.getItem("accessToken");
-      const tokenData = JSON.parse(tokenResponse);
-      const token = tokenData.token;
-
-      // Set the Authorization header with the token
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const updatedLead = {
-        name: editedData.name,
-        commission: editedData.commission,
-        link: editedData.link,
-        imageLink: editedData.imageLink,
-      };
-
-      await axios.put(`${API}/commissions/${leadId}`, updatedLead, config);
-      dispatch(sliceLeadDeleted(true));
-
-      dispatch(
-        showNotification({
-          message: "Account updated successfully!",
-          status: 1,
-        })
-      );
-
-      // Clear the edited values and toggle off editing mode
-      setEditedData({ name: "", commission: "", link: "", imageLink: "" });
-      setCurrentlyEditing(null);
-    } catch (error) {
-      if (error.response.status === 409) {
-        localStorage.clear();
-        window.location.href = "/login";
-      } else {
-        dispatch(
-          showNotification({
-            message: "Error updating Account. Please try again.",
-            status: 0,
-          })
-        );
-      }
-    }
-  };
-
-  const updateFormValue = ({ updateType, value }) => {
-    setEditedData({ ...editedData, [updateType]: value });
-  };
 
   const handleShareLink = async (link) => {
     navigator.clipboard
@@ -209,30 +133,8 @@ function AllLinks() {
                             ? format(new Date(l?.createdAt), "dd/MM/yyyy")
                             : "N/A"}
                         </td>
-                        <td>
-                          {currentlyEditing === k ? (
-                            <InputText
-                              defaultValue={editedData.name}
-                              updateType="name"
-                              //   containerStyle="mt-4"
-                              updateFormValue={updateFormValue}
-                            />
-                          ) : (
-                            l.name
-                          )}
-                        </td>
-                        <td>
-                          {currentlyEditing === k ? (
-                            <InputText
-                              defaultValue={editedData.commission}
-                              updateType="commission"
-                              //   containerStyle="mt-4"
-                              updateFormValue={updateFormValue}
-                            />
-                          ) : (
-                            l.commission
-                          )}
-                        </td>
+                        <td>{l.name}</td>
+                        <td>{l.commission}</td>
                         <td>
                           <button
                             className="btn px-6 btn-sm normal-case btn-success"

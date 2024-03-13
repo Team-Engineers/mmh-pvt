@@ -24,10 +24,11 @@ const SubmitAccount = () => {
   }
 
   const { id } = useParams();
+  const [name, setName] = useState("");
 
   // console.log("user is ", user);
   const INITIAL_COMMISSION_OBJ = {
-    name: "",
+    name: name,
     customerName: "",
     customerContact: "",
     hrName: user?.name,
@@ -37,7 +38,6 @@ const SubmitAccount = () => {
   const [formData, setFormData] = useState(INITIAL_COMMISSION_OBJ);
   const [errorMessage, setErrorMessage] = useState("");
   const [commission, setCommission] = useState("");
-  const [name, setName] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,20 +57,28 @@ const SubmitAccount = () => {
     fetchCommissionData();
   }, [id]);
 
+  // useEffect(() => {
+  //   setFormData({
+  //     ...formData,
+  //     name: name,
+  //   });
+  // }, [name, formData, setFormData]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-
-    setFormData({
-      ...formData,
-      name: name,
-    });
   };
 
   const handleUpdate = async () => {
+    console.log("name is", name);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      name: name,
+    }));
+
     setErrorMessage("");
     if (formData.customerName.trim() === "")
       return setErrorMessage("Customer Name is required!");
@@ -101,12 +109,7 @@ const SubmitAccount = () => {
             status: 1,
           })
         );
-        setFormData({
-          ...formData, // Spread the current state to ensure you don't lose other values
-          name: name,
-          customerName: "",
-          customerContact: "",
-        });
+        setFormData(INITIAL_COMMISSION_OBJ);
       } else {
         dispatch(
           showNotification({
@@ -123,7 +126,6 @@ const SubmitAccount = () => {
         dispatch(
           showNotification({
             message: `${error.response.data.message}`,
-
             status: 0,
           })
         );
