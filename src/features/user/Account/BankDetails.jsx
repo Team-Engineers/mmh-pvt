@@ -8,7 +8,7 @@ import { sliceLeadDeleted } from "../../leads/leadSlice";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 
-const ProfileSettings = () => {
+const BankDetails = () => {
   let user;
   const userString = localStorage.getItem("user");
   if (userString !== null && userString !== undefined) {
@@ -58,22 +58,10 @@ const ProfileSettings = () => {
       return;
     }
 
-    if (name.startsWith("bankDetails.")) {
-      const child = name.split(".")[1];
-      console.log("what is in the hcild", child);
-      setUserData((prevData) => ({
-        ...prevData,
-        bankDetails: {
-          ...prevData.bankDetails,
-          [child]: value,
-        },
-      }));
-    } else {
-      setUserData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+    setUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const isPasswordValid = (password) => {
@@ -115,7 +103,7 @@ const ProfileSettings = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("user data before submitting", userData);
+
       const response = await axios.put(
         `${API}/employee/${userData._id}`,
         userData,
@@ -156,7 +144,7 @@ const ProfileSettings = () => {
 
   return (
     <>
-      <TitleCard title="Profile Settings" topMargin="mt-2">
+      <TitleCard title="Bank Details" topMargin="mt-2">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="label">Name</label>
@@ -178,57 +166,28 @@ const ProfileSettings = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div>
-            <label className="label">Account Holder Name</label>
-            <input
-              type="text"
-              name="bankDetails.accountHolderName"
-              className="input input-bordered w-full"
-              value={userData?.bankDetails?.accountHolderName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label className="label">Account Number </label>
-            <input
-              type="number"
-              name="bankDetails.accountNumber"
-              className="input input-bordered w-full"
-              value={userData?.bankDetails?.accountNumber}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label className="label">IFSC Code</label>
-            <input
-              type="text"
-              name="bankDetails.ifscCode"
-              className="input input-bordered w-full"
-              value={userData?.bankDetails?.ifscCode}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label className="label">Branch Name</label>
-            <input
-              type="text"
-              name="bankDetails.branchName"
-              className="input input-bordered w-full"
-              value={userData?.bankDetails?.branchName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label className="label">UPI ID</label>
-            <input
-              type="text"
-              name="bankDetails.upiId"
-              className="input input-bordered w-full"
-              value={userData?.bankDetails?.upiId}
-              onChange={handleInputChange}
-            />
-          </div>
 
+          <div className="relative">
+            <label className="label">Password</label>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              className="input input-bordered w-full"
+              // value={userData.password}
+              onChange={handleInputChange}
+            />
+            <button
+              className="text-sm absolute right-0 top-[62%] mr-2"
+              type="button"
+              onClick={togglePasswordVisibility}
+            >
+              {!showPassword ? (
+                <EyeIcon className="h-5 w-5" />
+              ) : (
+                <EyeSlashIcon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
           <div>
             <label className="label">Gender</label>
             <select
@@ -270,27 +229,6 @@ const ProfileSettings = () => {
               }
               onChange={handleInputChange}
             />
-          </div>
-          <div className="relative">
-            <label className="label">Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              className="input input-bordered w-full"
-              // value={userData.password}
-              onChange={handleInputChange}
-            />
-            <button
-              className="text-sm absolute right-0 top-[62%] mr-2"
-              type="button"
-              onClick={togglePasswordVisibility}
-            >
-              {!showPassword ? (
-                <EyeIcon className="h-5 w-5" />
-              ) : (
-                <EyeSlashIcon className="h-5 w-5" />
-              )}
-            </button>
           </div>
           {userData?.isAdmin === false ? (
             <>
@@ -378,4 +316,4 @@ const ProfileSettings = () => {
   );
 };
 
-export default ProfileSettings;
+export default BankDetails;

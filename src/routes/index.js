@@ -191,7 +191,6 @@ if (isAdmin) {
       path: "/openedAccList",
       component: OpenedAccList,
     },
-
     {
       path: "/createForm/:id",
       component: SubmitAccount,

@@ -73,12 +73,6 @@ const SubmitAccount = () => {
   };
 
   const handleUpdate = async () => {
-    console.log("name is", name);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      name: name,
-    }));
-
     setErrorMessage("");
     if (formData.customerName.trim() === "")
       return setErrorMessage("Customer Name is required!");
@@ -86,6 +80,10 @@ const SubmitAccount = () => {
       return setErrorMessage("Customer Contact is required!");
 
     try {
+      const updatedFormData = {
+        ...formData,
+        name: name,
+      };
       const tokenResponse = localStorage.getItem("accessToken");
       const tokenData = JSON.parse(tokenResponse);
       const token = tokenData.token;
@@ -98,7 +96,7 @@ const SubmitAccount = () => {
 
       const response = await axios.post(
         `${API}/commissionForm`,
-        formData,
+        updatedFormData,
         config
       );
       if (response.status === 201) {
