@@ -14,6 +14,7 @@ module.exports = Object.freeze({
     ASSIGN_TL: "ASSIGN_TL",
     ASSIGN_HR: "ASSIGN_HR",
     ASSIGN_TO_TL: "ASSIGN_TO_TL",
+    SEND_SALARY: "SEND_SALARY",
 
     DEFAULT: "",
   },

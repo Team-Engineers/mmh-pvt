@@ -12,6 +12,7 @@ import { API } from "../../../utils/constants";
 import { sliceMemberDeleted, sliceMemberStatus } from "../../leads/leadSlice";
 import * as XLSX from "xlsx";
 import { showNotification } from "../../common/headerSlice";
+import { format } from "date-fns";
 
 function OpenedAccount() {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ function OpenedAccount() {
     };
 
     fetchData();
-  }, [ memberDeleted, memberStatus, dispatch]);
+  }, [memberDeleted, memberStatus, dispatch]);
 
   // const employeeData = JSON.parse(localStorage.getItem("employee-details"));
 
@@ -216,6 +217,7 @@ function OpenedAccount() {
             <table className="table w-full">
               <thead>
                 <tr>
+                  <th>Date</th>
                   <th>Account</th>
                   <th>HR Name</th>
                   <th>HR Contact</th>
@@ -229,6 +231,11 @@ function OpenedAccount() {
                 {filteredLeads?.map((l, k) => {
                   return (
                     <tr key={k}>
+                      <td>
+                        {l.createdAt
+                          ? format(new Date(l?.createdAt), "dd/MM/yyyy")
+                          : "N/A"}
+                      </td>
                       <td>{l.name}</td>
                       <td>{l.hrName}</td>
                       <td>{l.hrContact}</td>
@@ -243,7 +250,7 @@ function OpenedAccount() {
                           }
                         >
                           <option value="PENDING">Pending</option>
-                          <option value="DONE">Done</option>
+                          <option value="APPROVED">Approved</option>
                         </select>
                       </td>
                       <td>

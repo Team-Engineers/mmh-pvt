@@ -34,6 +34,7 @@ const SubmitAccount = () => {
     hrName: user?.name,
     hrId: user?._id,
     hrContact: user?.contact,
+    commissionAmount: "",
   };
   const [formData, setFormData] = useState(INITIAL_COMMISSION_OBJ);
   const [errorMessage, setErrorMessage] = useState("");
@@ -83,6 +84,8 @@ const SubmitAccount = () => {
       const updatedFormData = {
         ...formData,
         name: name,
+        hrContact: user.contact,
+        commissionAmount: commission,
       };
       const tokenResponse = localStorage.getItem("accessToken");
       const tokenData = JSON.parse(tokenResponse);

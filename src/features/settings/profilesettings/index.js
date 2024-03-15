@@ -189,6 +189,16 @@ const ProfileSettings = () => {
             />
           </div>
           <div>
+            <label className="label">Bank Name</label>
+            <input
+              type="text"
+              name="bankDetails.bankName"
+              className="input input-bordered w-full"
+              value={userData?.bankDetails?.bankName}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div>
             <label className="label">Account Number </label>
             <input
               type="number"

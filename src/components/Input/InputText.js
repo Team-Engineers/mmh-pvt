@@ -9,6 +9,8 @@ function InputText({
   placeholder,
   updateFormValue,
   updateType,
+  maxValue,
+  minValue,
 }) {
   const [value, setValue] = useState("");
 
@@ -36,6 +38,8 @@ function InputText({
         className={`input input-bordered w-full ${
           labelTitle === "Password" ? "pr-8" : ""
         }`}
+        max={maxValue}
+        min={minValue}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import TitleCard from "../../../components/Cards/TitleCard";
 import axios from "axios";
 import { API } from "../../../utils/constants";
 import { sliceMemberDeleted, sliceMemberStatus } from "../../leads/leadSlice";
+import { format } from "date-fns";
 
 function OpenedAccList() {
   let user;
@@ -41,8 +42,8 @@ function OpenedAccList() {
         setTeamMember(response.data);
       } catch (error) {
         if (error.response.status === 409) {
-            localStorage.clear();
-            window.location.href = "/login";
+          localStorage.clear();
+          window.location.href = "/login";
         }
         console.error("error", error);
       }
@@ -91,11 +92,12 @@ function OpenedAccList() {
             <table className="table w-full">
               <thead>
                 <tr>
+                  <th>Date</th>
                   <th>Account</th>
-                  <th>HR Name</th>
-                  <th>HR Contact</th>
                   <th>Customer Name</th>
                   <th>Customer Contact</th>
+                  <th>Commission</th>
+
                   <th>Status</th>
                 </tr>
               </thead>
@@ -103,11 +105,15 @@ function OpenedAccList() {
                 {filteredLeads?.map((l, k) => {
                   return (
                     <tr key={k}>
+                      <td>
+                        {l.createdAt
+                          ? format(new Date(l?.createdAt), "dd/MM/yyyy")
+                          : "N/A"}
+                      </td>
                       <td>{l.name}</td>
-                      <td>{l.hrName}</td>
-                      <td>{l.hrContact}</td>
                       <td>{l.customerName}</td>
                       <td>{l.customerContact}</td>
+                      <td>{l.commissionAmount}</td>
                       <td>
                         <button
                           className={`btn px-6 btn-sm normal-case ${

@@ -142,6 +142,39 @@ function TeamMembers() {
         );
   };
 
+  const SalaryModal = (
+    userId,
+    accountBalance,
+    bankName,
+    accountNumber,
+    ifscCode,
+    branchName,
+    accountHolderName,
+    upiId,
+    name
+  ) => {
+    // console.log("tlid and HRid initially from ", tlId, hrId);
+    dispatch(
+      openModal({
+        title: `Bank Details of ${name} HR`,
+        bodyType: MODAL_BODY_TYPES.SEND_SALARY,
+
+        extraObject: {
+          message: `Enter the amount to send ${name} HR`,
+          type: MODAL_BODY_TYPES.SEND_SALARY,
+          userId: userId,
+          amount: accountBalance,
+          bankName: bankName,
+          branchName: branchName,
+          accountHolderName: accountHolderName,
+          accountNumber: accountNumber,
+          ifscCode: ifscCode,
+          upiId: upiId,
+        },
+      })
+    );
+  };
+
   const handleStatusChange = async (memberId, newStatus) => {
     try {
       const storedToken = localStorage.getItem("accessToken");
@@ -423,6 +456,8 @@ function TeamMembers() {
                     <td>Closed </td>
 
                     <td> Date Assigned</td>
+                    <td> Total Present</td>
+                    <td>Salary</td>
 
                     <th>Email Id</th>
 
@@ -524,6 +559,27 @@ function TeamMembers() {
                             : "N/A"}
                         </td>
 
+                        <td>{l.presentDays?.length}</td>
+                        <td>
+                          <button
+                            onClick={() =>
+                              SalaryModal(
+                                l._id,
+                                l.accountBalance,
+                                l.bankDetails?.bankName,
+                                l.bankDetails?.accountNumber,
+                                l.bankDetails?.ifscCode,
+                                l.bankDetails?.branchName,
+                                l.bankDetails?.accountHolderName,
+                                l.bankDetails?.upiId,
+                                l.name
+                              )
+                            }
+                            className="btn btn-primary  normal-case btn-sm"
+                          >
+                            {l.accountBalance} ₹
+                          </button>
+                        </td>
                         <td>{l.email}</td>
 
                         <td className="text-center">
