@@ -13,6 +13,9 @@ const SubmitAccount = lazy(() =>
 const OpenedAccList = lazy(() =>
   import("../features/user/Account/OpenedAccList")
 );
+const SalaryReceived = lazy(() =>
+  import("../features/user/Account/SalaryReceived")
+);
 const ClosedLeads = lazy(() => import("../pages/protected/ClosedLeads"));
 const NotCalledLeads = lazy(() => import("../pages/protected/NotCalledLeads"));
 
@@ -51,6 +54,10 @@ const AllDematAccount = lazy(() =>
 
 const OpenedAccount = lazy(() =>
   import("../features/settings/dematAccount/OpenedAccount")
+);
+
+const ApprovedAccount = lazy(() =>
+  import("../features/settings/dematAccount/ApprovedAccount")
 );
 
 const ActiveMembers = lazy(() => import("../pages/protected/ActiveMembers"));
@@ -190,6 +197,14 @@ if (isAdmin) {
     {
       path: "/openedAccList",
       component: OpenedAccList,
+    },
+    {
+      path: "/approvedAccount",
+      component: ApprovedAccount,
+    },
+    {
+      path: "/salaryReceived",
+      component: SalaryReceived,
     },
     {
       path: "/createForm/:id",

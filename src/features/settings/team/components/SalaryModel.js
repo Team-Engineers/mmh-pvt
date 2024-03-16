@@ -19,6 +19,8 @@ function SalaryModel({ extraObject, closeModal }) {
     accountNumber,
     ifscCode,
     upiId,
+    hrName,
+    hrContact
   } = extraObject;
 
   const INITIAL_PAYMENT_OBJ = {
@@ -30,6 +32,8 @@ function SalaryModel({ extraObject, closeModal }) {
     accountNumber: accountNumber,
     ifscCode: ifscCode,
     upiId: upiId,
+    hrName : hrName,
+    hrContact : hrContact
   };
   const [paymentData, setPaymentData] = useState(INITIAL_PAYMENT_OBJ);
 

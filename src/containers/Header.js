@@ -1,7 +1,7 @@
 import { themeChange } from "theme-change";
 import React, { useEffect, useState } from "react";
 // import {  useDispatch } from 'react-redux'
-// import BellIcon  from '@heroicons/react/24/outline/BellIcon'
+// import BellIcon from "@heroicons/react/24/outline/BellIcon";
 import Bars3Icon from "@heroicons/react/24/outline/Bars3Icon";
 import MoonIcon from "@heroicons/react/24/outline/MoonIcon";
 import SunIcon from "@heroicons/react/24/outline/SunIcon";
@@ -14,6 +14,7 @@ import { API } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { sliceLeadDeleted } from "../features/leads/leadSlice";
 import { showNotification } from "../features/common/headerSlice";
+import WalletIcon from "@heroicons/react/24/outline/WalletIcon";
 
 function Header() {
   let storedUserData;
@@ -173,23 +174,40 @@ function Header() {
 
         <div className="order-last">
           {storedUserData?.role?.includes("HR") ? (
-            <div
-              className={
-                attendanceMarked
-                  ? "btn btn-success normal-case btn-sm p-1 mr-5"
-                  : "btn btn-danger bg-red-600 normal-case btn-sm p-1 mr-5"
-              }
-              onClick={isButtonEnabled ? handleAttendanceMarking : null}
-              style={{
-                opacity: isButtonEnabled ? 1 : 0.5,
-                pointerEvents: isButtonEnabled ? "auto" : "none",
-              }}
-            >
-              {attendanceMarked ? <h5>Present</h5> : <h5>Absent</h5>}
+            <div className="flex items-center gap-3 justify-center mr-7">
+              <div
+                className={
+                  attendanceMarked
+                    ? "btn btn-success normal-case btn-sm"
+                    : "btn btn-danger bg-red-600 normal-case btn-sm"
+                }
+                onClick={isButtonEnabled ? handleAttendanceMarking : null}
+                style={{
+                  opacity: isButtonEnabled ? 1 : 0.5,
+                  pointerEvents: isButtonEnabled ? "auto" : "none",
+                }}
+              >
+                {attendanceMarked ? <h5>Present</h5> : <h5>Absent</h5>}
+              </div>
+              <Link
+                className="bg-base-300 w-2/3 gap-1 btn btn-ghost btn-circle"
+                to="/app/approvedAccount"
+              >
+                <div>
+                  <WalletIcon className="h-6 inline-block w-6" />
+                </div>
+                <h6 className="">{storedUserData.accountBalance} ₹</h6>
+              </Link>
             </div>
           ) : (
             ""
           )}
+
+          {/* <div className="flex items-center gap-2 justify-center">
+            <h6>{userString.accountBalance}</h6>
+            <BellIcon />
+            rbfgbgb
+          </div> */}
 
           <label className="swap ">
             <input type="checkbox" />
@@ -211,7 +229,7 @@ function Header() {
             />
           </label>
 
-          <div className="dropdown dropdown-end ml-4">
+          <div className="dropdown dropdown-end ml-3">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img src={logo} alt="profile" />

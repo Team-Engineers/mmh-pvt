@@ -151,16 +151,17 @@ function TeamMembers() {
     branchName,
     accountHolderName,
     upiId,
-    name
+    hrName,
+    hrContact
   ) => {
     // console.log("tlid and HRid initially from ", tlId, hrId);
     dispatch(
       openModal({
-        title: `Bank Details of ${name} HR`,
+        title: `Bank Details of ${hrName} HR`,
         bodyType: MODAL_BODY_TYPES.SEND_SALARY,
 
         extraObject: {
-          message: `Enter the amount to send ${name} HR`,
+          message: `Enter the amount to send ${hrName} HR`,
           type: MODAL_BODY_TYPES.SEND_SALARY,
           userId: userId,
           amount: accountBalance,
@@ -170,6 +171,8 @@ function TeamMembers() {
           accountNumber: accountNumber,
           ifscCode: ifscCode,
           upiId: upiId,
+          hrName: hrName,
+          hrContact: hrContact,
         },
       })
     );
@@ -572,7 +575,8 @@ function TeamMembers() {
                                 l.bankDetails?.branchName,
                                 l.bankDetails?.accountHolderName,
                                 l.bankDetails?.upiId,
-                                l.name
+                                l.name,
+                                l.contact
                               )
                             }
                             className="btn btn-primary  normal-case btn-sm"

@@ -13,6 +13,7 @@ import UserPlusIcon from "@heroicons/react/24/outline/UserPlusIcon";
 import BoltIcon from "@heroicons/react/24/outline/BoltIcon";
 
 import GlobeAltIcon from "@heroicons/react/24/outline/GlobeAltIcon";
+
 import LockOpenIcon from "@heroicons/react/24/outline/LockOpenIcon";
 import BanknotesIcon from "@heroicons/react/24/outline/BanknotesIcon";
 
@@ -60,6 +61,11 @@ if (user?.approvedAt && !isAdmin && user?.role?.includes("HR")) {
       path: "/app/settings-profile",
       icon: <GlobeAltIcon className={submenuIconClasses} />,
       name: "Profile Details",
+    },
+    {
+      path: "/app/salaryReceived",
+      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      name: "Salary Received",
     },
     {
       path: "/app/previousLeads",

@@ -35,6 +35,7 @@ const SubmitAccount = () => {
     hrId: user?._id,
     hrContact: user?.contact,
     commissionAmount: "",
+    category: "none",
   };
   const [formData, setFormData] = useState(INITIAL_COMMISSION_OBJ);
   const [errorMessage, setErrorMessage] = useState("");
