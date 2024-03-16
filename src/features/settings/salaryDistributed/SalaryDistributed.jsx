@@ -103,7 +103,7 @@ function SalaryDistributed() {
                   <th>IFSC code</th>
                   <th>Account Number</th>
                   <th>UPI Id</th>
-                  <th>Received</th>
+                  <th>Sent</th>
                 </tr>
               </thead>
               <tbody>

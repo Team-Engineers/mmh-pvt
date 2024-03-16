@@ -12,14 +12,29 @@ import UserGroupIcon from "@heroicons/react/24/outline/UserGroupIcon";
 import UserPlusIcon from "@heroicons/react/24/outline/UserPlusIcon";
 import BoltIcon from "@heroicons/react/24/outline/BoltIcon";
 
-import GlobeAltIcon from "@heroicons/react/24/outline/GlobeAltIcon";
+// import GlobeAltIcon from "@heroicons/react/24/outline/GlobeAltIcon";
 
 import LockOpenIcon from "@heroicons/react/24/outline/LockOpenIcon";
-import BanknotesIcon from "@heroicons/react/24/outline/BanknotesIcon";
+// import BanknotesIcon from "@heroicons/react/24/outline/BanknotesIcon";
 
 import CheckBadgeIcon from "@heroicons/react/24/outline/CheckBadgeIcon";
+// import ArrowsPointingOutIcon from "@heroicons/react/24/outline/ArrowsPointingOutIcon";
+
+// import AdjustmentsHorizontalIcon from "@heroicons/react/24/outline/AdjustmentsHorizontalIcon";
+
+import BuildingOffice2Icon from "@heroicons/react/24/outline/BuildingOffice2Icon";
+import CurrencyRupeeIcon from "@heroicons/react/24/outline/CurrencyRupeeIcon";
+// import GlobeAsiaAustraliaIcon from "@heroicons/react/24/outline/GlobeAsiaAustraliaIcon";
 
 import QuestionMarkCircleIcon from "@heroicons/react/24/outline/QuestionMarkCircleIcon";
+import {
+  ArchiveBoxArrowDownIcon,
+  FireIcon,
+  FolderPlusIcon,
+  PhoneXMarkIcon,
+  ShieldCheckIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;
@@ -44,37 +59,47 @@ if (user?.approvedAt && !isAdmin && user?.role?.includes("HR")) {
   routes.push(
     {
       path: "/app/userLeads",
-      icon: <SparklesIcon className={iconClasses} />,
+      icon: <PhoneArrowUpRightIcon className={iconClasses} />,
       name: "Today's Leads",
     },
     {
       path: "/app/allLinks",
-      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      icon: <BuildingOffice2Icon className={submenuIconClasses} />,
       name: "All Links",
     },
     {
-      path: "/app/openedAccList",
-      icon: <GlobeAltIcon className={submenuIconClasses} />,
-      name: "Opened Account List",
+      path: "/app/openedAccList/PENDING",
+      icon: <ArchiveBoxArrowDownIcon className={submenuIconClasses} />,
+      name: "Pending Account List",
+    },
+    {
+      path: "/app/openedAccList/COMPLETED",
+      icon: <CheckBadgeIcon className={submenuIconClasses} />,
+      name: "Completed Account List",
+    },
+    {
+      path: "/app/openedAccList/APPROVED",
+      icon: <ShieldCheckIcon className={submenuIconClasses} />,
+      name: "Approved Account List",
     },
     {
       path: "/app/settings-profile",
-      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      icon: <UserCircleIcon className={submenuIconClasses} />,
       name: "Profile Details",
     },
     {
       path: "/app/salaryReceived",
-      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      icon: <CurrencyRupeeIcon className={submenuIconClasses} />,
       name: "Salary Received",
     },
     {
       path: "/app/previousLeads",
-      icon: <BanknotesIcon className={iconClasses} />,
+      icon: <PhoneXMarkIcon className={iconClasses} />,
       name: "Previous Leads",
     },
     {
       path: "/app/closedLeads",
-      icon: <CheckBadgeIcon className={iconClasses} />,
+      icon: <FireIcon className={iconClasses} />,
       name: "Closed Leads",
     }
   );
@@ -142,20 +167,31 @@ if (isAdmin) {
 
     {
       path: "/app/addAccount",
-      icon: <RocketLaunchIcon className={submenuIconClasses} />,
+      icon: <FolderPlusIcon className={submenuIconClasses} />,
       name: "Add Account",
     },
 
     {
       path: "/app/allAccount",
-      icon: <GlobeAltIcon className={submenuIconClasses} />,
+      icon: <BuildingOffice2Icon className={submenuIconClasses} />,
       name: "All Account",
     },
 
     {
-      path: "/app/openedAccount",
-      icon: <RocketLaunchIcon className={submenuIconClasses} />,
-      name: "Opened Account",
+      path: "/app/openedAccount/OPENED",
+      icon: <ArchiveBoxArrowDownIcon className={submenuIconClasses} />,
+      name: "Pending Account",
+    },
+
+    {
+      path: "/app/openedAccount/APPROVED",
+      icon: <ShieldCheckIcon className={submenuIconClasses} />,
+      name: "Approved Account",
+    },
+    {
+      path: "/app/openedAccount/COMPLETED",
+      icon: <CheckBadgeIcon className={submenuIconClasses} />,
+      name: "Completed Account",
     },
 
     {
@@ -186,13 +222,18 @@ if (isAdmin) {
       name: "Add Team Leader",
     },
     {
+      path: "/app/salaryDistributed",
+      icon: <CurrencyRupeeIcon className={submenuIconClasses} />,
+      name: "Salary Distributed",
+    },
+    {
       path: "/app/calledLeads",
       icon: <PhoneArrowUpRightIcon className={iconClasses} />,
       name: "Called Leads",
     },
     {
       path: "/app/closedLeads",
-      icon: <CheckBadgeIcon className={iconClasses} />,
+      icon: <FireIcon className={iconClasses} />,
       name: "Closed Leads",
     }
   );

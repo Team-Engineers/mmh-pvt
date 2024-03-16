@@ -89,7 +89,23 @@ function Header() {
     const isTimeInRange = currentHour >= 0 && currentHour < 10;
 
     setIsButtonEnabled(isTimeInRange);
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `${API}/employee/?id=${storedUserData._id}`
+        );
+        localStorage.setItem("user", JSON.stringify(response.data.data[0]));
+        delete response?.data?.data[0]?.password;
+      } catch (error) {
+        if (error.response.status === 409) {
+          localStorage.clear();
+          window.location.href = "/login";
+        }
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserData();
+  }, [storedUserData._id]);
   // const getLatestData = async () => {
   //   try {
   //     const storedUserData = JSON.parse(localStorage.getItem("user"));

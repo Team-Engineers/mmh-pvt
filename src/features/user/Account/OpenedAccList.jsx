@@ -5,8 +5,10 @@ import axios from "axios";
 import { API } from "../../../utils/constants";
 import { sliceMemberDeleted, sliceMemberStatus } from "../../leads/leadSlice";
 import { format } from "date-fns";
+// import { useParams } from "react-router-dom";
 
 function OpenedAccList() {
+  // const {status} = useParams();
   let user;
   const userString = localStorage.getItem("user");
   if (userString !== null && userString !== undefined) {
@@ -39,6 +41,7 @@ function OpenedAccList() {
       const baseURL = `${API}/commissionForm/hr/${user._id}`;
       try {
         const response = await axios.get(baseURL, config);
+
         setTeamMember(response.data);
       } catch (error) {
         if (error.response.status === 409) {

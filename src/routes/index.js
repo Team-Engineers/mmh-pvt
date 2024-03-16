@@ -1,6 +1,9 @@
 // All components mapping with path for internal routes
 
 import { lazy } from "react";
+const SalaryDistributed = lazy(() =>
+  import("../features/settings/salaryDistributed/SalaryDistributed")
+);
 
 const Welcome = lazy(() => import("../pages/protected/Welcome"));
 const Page404 = lazy(() => import("../pages/protected/404"));
@@ -159,12 +162,24 @@ if (isAdmin) {
       component: AllDematAccount,
     },
     {
-      path: "/openedAccount",
+      path: "/openedAccount/OPENED",
+      component: OpenedAccount,
+    },
+    {
+      path: "/openedAccount/COMPLETED",
+      component: OpenedAccount,
+    },
+    {
+      path: "/openedAccount/APPROVED",
       component: OpenedAccount,
     },
     {
       path: "/addTL",
       component: AddTL,
+    },
+    {
+      path: "/salaryDistributed",
+      component: SalaryDistributed,
     },
     {
       path: "/uploadLeads",
@@ -173,6 +188,10 @@ if (isAdmin) {
     {
       path: "/notAssigned",
       component: OpenLeads,
+    },
+    {
+      path: "/salaryReceived",
+      component: SalaryReceived,
     },
     {
       path: "/closedLeads",
@@ -195,7 +214,15 @@ if (isAdmin) {
       component: AllLinks,
     },
     {
-      path: "/openedAccList",
+      path: "/openedAccList/PENDING",
+      component: OpenedAccList,
+    },
+    {
+      path: "/openedAccList/COMPLETED",
+      component: OpenedAccList,
+    },
+    {
+      path: "/openedAccList/APPROVED",
       component: OpenedAccList,
     },
     {
