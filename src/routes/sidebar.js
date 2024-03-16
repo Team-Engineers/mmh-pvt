@@ -172,10 +172,11 @@ if (isAdmin) {
     },
 
     {
-      path: "/app/allAccount",
+      path: "/app/allCategory",
       icon: <BuildingOffice2Icon className={submenuIconClasses} />,
-      name: "All Account",
+      name: "All Category",
     },
+    
 
     {
       path: "/app/openedAccount/OPENED",

@@ -13,6 +13,7 @@ function DematAccount() {
     link: "",
     commission: "",
     imageLink: "",
+    category: "default",
   };
 
   const [loading, setLoading] = useState(false);
@@ -30,6 +31,8 @@ function DematAccount() {
       return setErrorMessage("Link is required!");
     if (accountObj.commission.trim() === "")
       return setErrorMessage("Commission is required!");
+    if (accountObj.category === "default")
+      return setErrorMessage("Category is required!");
     else {
       setLoading(true);
       accountObj.name = accountObj.name.replace(/\s/g, "");
@@ -80,11 +83,16 @@ function DematAccount() {
     setAccountObj({ ...accountObj, [updateType]: value });
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAccountObj({ ...accountObj, [name]: value });
+  };
+
   return (
     <div className="min-h-screen  bg-base-200 flex items-center">
       <div className="card mx-auto max-w-xl w-full  shadow-xl">
         <div className="grid grid-cols-1  bg-base-100 rounded-xl">
-          <div className="py-24 px-10">
+          <div className="py-8 px-10">
             <h2 className="text-2xl font-semibold mb-2 text-center">
               Add Account
             </h2>
@@ -113,6 +121,23 @@ function DematAccount() {
                   labelTitle="Commission"
                   updateFormValue={updateFormValue}
                 />
+
+                <div>
+                  <label className="label">Category</label>
+                  <select
+                    name="category"
+                    updateType="category"
+                    className="input input-bordered w-full pe-2"
+                    onChange={handleInputChange}
+                  >
+                    <option value="default" selected disabled>
+                      Select Category
+                    </option>
+                    <option value="SAVINGS_ACCOUNT">Saving Account</option>
+                    <option value="SPECIAL_PRODUCTS">Special Product</option>
+                    <option value="DEMAT_ACCOUNT">Demat Account</option>
+                  </select>
+                </div>
 
                 <InputText
                   defaultValue={accountObj.imageLink}

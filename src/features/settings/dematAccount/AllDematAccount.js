@@ -15,9 +15,11 @@ import {
 import { showNotification } from "../../common/headerSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
 import InputText from "../../../components/Input/InputText";
+import { useParams } from "react-router-dom";
 
 function AllDematAccount() {
   const dispatch = useDispatch();
+  const { category } = useParams();
   const [leadData, setLeadData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
   const [currentlyEditing, setCurrentlyEditing] = useState(null);
@@ -26,6 +28,7 @@ function AllDematAccount() {
     commission: "",
     link: "",
     imageLink: "",
+    category: "",
   });
 
   // const leadDetails = JSON.parse(localStorage.getItem("lead-details"));
@@ -40,12 +43,15 @@ function AllDematAccount() {
         // limit: itemsPerPage,
         // offset: Math.max(0, currentPage - 1) * 10,
       };
-      const baseURL = `${API}/commissions`;
+      let categoryURL = `${API}/commissions/category/${category}`;
+      if (category === "all_products") {
+        categoryURL = `${API}/commissions`;
+      }
+      const baseURL = categoryURL;
       try {
         const response = await axios.get(baseURL, { params: params });
         if (response.status === 200) {
-          console.log("response data of commision", response.data);
-          // localStorage.setItem("lead-details", JSON.stringify(response.data));
+          // console.log("response data of commision", response.data);
           setLeadData(response.data);
         } else {
           console.log("access token incorrect");
@@ -61,7 +67,7 @@ function AllDematAccount() {
     };
 
     fetchData();
-  }, [leadDeleted, todayDateString, dispatch]);
+  }, [leadDeleted, todayDateString, category, dispatch]);
 
   const deleteCurrentLead = (index) => {
     dispatch(
@@ -107,7 +113,8 @@ function AllDematAccount() {
         !editedData.name ||
         !editedData.commission ||
         !editedData.link ||
-        !editedData.imageLink
+        !editedData.imageLink ||
+        editedData.category === "default"
       ) {
         dispatch(
           showNotification({
@@ -132,6 +139,7 @@ function AllDematAccount() {
         commission: editedData.commission,
         link: editedData.link,
         imageLink: editedData.imageLink,
+        category: editedData.category,
       };
 
       await axios.put(`${API}/commissions/${leadId}`, updatedLead, config);
@@ -164,6 +172,11 @@ function AllDematAccount() {
 
   const updateFormValue = ({ updateType, value }) => {
     setEditedData({ ...editedData, [updateType]: value });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedData({ ...editedData, [name]: value });
   };
 
   const convertDataToXLSX = (data) => {
@@ -249,7 +262,7 @@ function AllDematAccount() {
       </div>
 
       <TitleCard
-        title={`All Accounts ${leadData?.length}`}
+        title={`${category.split('_').join(" ")} ${leadData?.length}`}
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons onExportXLSX={handleExportXLSX} />}
       >
@@ -268,6 +281,7 @@ function AllDematAccount() {
 
                     <th>Commission</th>
                     <th>Account Link</th>
+                    <th>Category</th>
                     <th>Image Link</th>
                     {/* <th>Assignee Status</th> */}
 
@@ -291,7 +305,7 @@ function AllDematAccount() {
                             ? format(new Date(l?.createdAt), "dd/MM/yyyy")
                             : "N/A"}
                         </td>
-                        <td  style={{ maxWidth: "7rem" }}>
+                        <td style={{ maxWidth: "7rem" }}>
                           {currentlyEditing === k ? (
                             <InputText
                               defaultValue={editedData.name}
@@ -329,6 +343,35 @@ function AllDematAccount() {
                             )}
                           </div>
                         </td>
+                        <td style={{ maxWidth: "10rem" }}>
+                          <div className="overflow-hidden truncate">
+                            {currentlyEditing === k ? (
+                              <select
+                                name="category"
+                                updateType="category"
+                                className="input input-bordered w-full pe-2"
+                                value={editedData.category?.toUpperCase()} // Set initial value to uppercase
+                                onChange={handleInputChange}
+                              >
+                                <option value="default" disabled>
+                                  Select Category
+                                </option>
+                                <option value="SAVINGS_ACCOUNT">
+                                  Savings Account
+                                </option>
+                                <option value="SPECIAL_PRODUCTS">
+                                  Special Product
+                                </option>
+                                <option value="DEMAT_ACCOUNT">
+                                  Demat Account
+                                </option>
+                              </select>
+                            ) : (
+                              l.category.toUpperCase() // Display uppercase category if not editing
+                            )}
+                          </div>
+                        </td>
+
                         <td style={{ maxWidth: "7rem" }}>
                           <div className=" overflow-hidden truncate">
                             {currentlyEditing === k ? (

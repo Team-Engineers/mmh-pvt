@@ -55,6 +55,10 @@ const AllDematAccount = lazy(() =>
   import("../features/settings/dematAccount/AllDematAccount")
 );
 
+const Category = lazy(() =>
+  import("../features/settings/dematAccount/Category")
+);
+
 const OpenedAccount = lazy(() =>
   import("../features/settings/dematAccount/OpenedAccount")
 );
@@ -158,7 +162,11 @@ if (isAdmin) {
       component: DematAccount,
     },
     {
-      path: "/allAccount",
+      path: "/allCategory",
+      component: Category,
+    },
+    {
+      path: "/allCategory/:category",
       component: AllDematAccount,
     },
     {
