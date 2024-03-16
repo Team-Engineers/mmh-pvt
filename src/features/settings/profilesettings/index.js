@@ -95,6 +95,15 @@ const ProfileSettings = () => {
       );
       return;
     }
+    if (userData.contact && userData.contact.length !== 10) {
+      dispatch(
+        showNotification({
+          message: "Contact number must be 10 digits long!",
+          status: 0,
+        })
+      );
+      return;
+    }
 
     if (!isEmailValid(userData.email)) {
       dispatch(

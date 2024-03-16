@@ -73,7 +73,9 @@ const SubmitAccount = () => {
       return setErrorMessage("Customer Name is required!");
     if (formData.customerContact.trim() === "")
       return setErrorMessage("Customer Contact is required!");
-
+    if (formData.customerContact && formData.customerContact.length !== 10) {
+      return setErrorMessage("Phone number must be 10 digits long!");
+    }
     try {
       const updatedFormData = {
         ...formData,

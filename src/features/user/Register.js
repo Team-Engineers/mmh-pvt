@@ -35,6 +35,9 @@ function Register() {
     if (!isEmailValid(registerObj.email)) {
       return setErrorMessage("Email is not valid!");
     }
+    if (registerObj.contact && registerObj.contact.length !== 10) {
+      return setErrorMessage("Phone number must be 10 digits long!");
+    }
     if (!isPasswordValid(registerObj.password)) {
       return setErrorMessage("Password requirements: 8 characters minimum");
     } else {
@@ -99,7 +102,7 @@ function Register() {
                   className="w-12 inline-block mr-2 mask mask-circle"
                   alt="Earn-from-talent-logo"
                 />
-               Make Money From Home 
+                Make Money From Home
               </h1>
             </div>
 

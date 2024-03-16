@@ -33,6 +33,9 @@ function AddTeamLeader() {
     if (!isEmailValid(registerObj.email)) {
       return setErrorMessage("Email is not valid!");
     }
+    if (registerObj.contact && registerObj.contact.length !== 10) {
+      return setErrorMessage("Contact number must be 10 digits long!");
+    }
     if (!isPasswordValid(registerObj.password)) {
       return setErrorMessage("Password requirements: 8 characters minimum");
     } else {
