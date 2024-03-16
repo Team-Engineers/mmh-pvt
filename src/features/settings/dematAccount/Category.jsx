@@ -3,9 +3,21 @@ import TitleCard from "../../../components/Cards/TitleCard";
 import { Link } from "react-router-dom";
 
 const Category = () => {
+  let user;
+  const userString = localStorage.getItem("user");
+  if (userString !== null && userString !== undefined) {
+    try {
+      user = JSON.parse(userString);
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      localStorage.clear();
+    }
+  } else {
+    localStorage.clear();
+  }
   return (
     <TitleCard topMargin="mt-2" title={`All Categories`}>
-      <div className="flex flex-col justify-center items-center gap-6  sm:flex-row  max-sm:mt-4">
+      <div className="flex flex-col justify-center items-center gap-6 flex-wrap  sm:flex-row  max-sm:mt-4">
         <div className="relative md:hover:scale-[110%] duration-100">
           <Link
             to="demat_account"
@@ -43,17 +55,22 @@ const Category = () => {
             </p>
           </Link>
         </div>
-        <div className="relative md:hover:scale-[110%] duration-100">
-          <Link
-            to="all_products"
-            class="block max-w-sm p-6 h-60 w-60 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-          >
-            <h5 class="mb-2 text-2xl font-bold">All Products</h5>
-            <p class="font-normal text-gray-700 dark:text-gray-400">
-              All category included in this like Demat Account, Special Products and Saving Account
-            </p>
-          </Link>
-        </div>
+        {user.isAdmin ? (
+          <div className="relative md:hover:scale-[110%] duration-100">
+            <Link
+              to="all_products"
+              class="block max-w-sm p-6 h-60 w-60 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+            >
+              <h5 class="mb-2 text-2xl font-bold">All Products</h5>
+              <p class="font-normal text-gray-700 dark:text-gray-400">
+                All category included in this like Demat Account, Special
+                Products and Saving Account
+              </p>
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </TitleCard>
   );

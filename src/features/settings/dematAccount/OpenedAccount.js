@@ -13,9 +13,11 @@ import { sliceMemberDeleted, sliceMemberStatus } from "../../leads/leadSlice";
 import * as XLSX from "xlsx";
 import { showNotification } from "../../common/headerSlice";
 import { format } from "date-fns";
+import { useParams } from "react-router-dom";
 
 function OpenedAccount() {
   const dispatch = useDispatch();
+  const { status } = useParams();
   const [teamMember, setTeamMember] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
@@ -32,9 +34,17 @@ function OpenedAccount() {
       //     approvedAt: "null",
       //     isAdmin: "false",
       //   };
-      const baseURL = `${API}/commissionForm`;
+      const tokenResponse = localStorage.getItem("accessToken");
+      const tokenData = JSON.parse(tokenResponse);
+      const token = tokenData.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const baseURL = `${API}/commissionForm/status/${status}`;
       try {
-        const response = await axios.get(baseURL);
+        const response = await axios.get(baseURL, config);
         setTeamMember(response.data);
       } catch (error) {
         if (error.response.status === 409) {
@@ -49,7 +59,7 @@ function OpenedAccount() {
     };
 
     fetchData();
-  }, [memberDeleted, memberStatus, dispatch]);
+  }, [memberDeleted, memberStatus, status, dispatch]);
 
   // const employeeData = JSON.parse(localStorage.getItem("employee-details"));
 
@@ -142,7 +152,7 @@ function OpenedAccount() {
           className="btn px-6 btn-sm normal-case btn-primary"
           onClick={onExportXLSX}
         >
-          Export Opened Account
+          Export {`${status.toLowerCase().split("_").join(" ")}`} Account
         </button>
       </div>
     );
@@ -209,7 +219,9 @@ function OpenedAccount() {
         <p>No Data Found</p>
       ) : (
         <TitleCard
-          title={`Total Opened Account ${teamMember?.length}`}
+          title={`Total ${status.toUpperCase().split("_").join(" ")} Account ${
+            teamMember?.length
+          }`}
           topMargin="mt-2"
           TopSideButtons={<TopSideButtons onExportXLSX={handleExportXLSX} />}
         >

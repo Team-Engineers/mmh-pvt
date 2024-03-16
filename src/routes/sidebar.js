@@ -63,9 +63,9 @@ if (user?.approvedAt && !isAdmin && user?.role?.includes("HR")) {
       name: "Today's Leads",
     },
     {
-      path: "/app/allLinks",
+      path: "/app/allCategory",
       icon: <BuildingOffice2Icon className={submenuIconClasses} />,
-      name: "All Links",
+      name: "All Category",
     },
     {
       path: "/app/openedAccList/PENDING",
@@ -176,10 +176,9 @@ if (isAdmin) {
       icon: <BuildingOffice2Icon className={submenuIconClasses} />,
       name: "All Category",
     },
-    
 
     {
-      path: "/app/openedAccount/OPENED",
+      path: "/app/openedAccount/PENDING",
       icon: <ArchiveBoxArrowDownIcon className={submenuIconClasses} />,
       name: "Pending Account",
     },

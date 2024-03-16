@@ -170,15 +170,7 @@ if (isAdmin) {
       component: AllDematAccount,
     },
     {
-      path: "/openedAccount/OPENED",
-      component: OpenedAccount,
-    },
-    {
-      path: "/openedAccount/COMPLETED",
-      component: OpenedAccount,
-    },
-    {
-      path: "/openedAccount/APPROVED",
+      path: "/openedAccount/:status",
       component: OpenedAccount,
     },
     {
@@ -216,21 +208,16 @@ if (isAdmin) {
       path: "/userLeads",
       component: UserTodayLeads,
     },
-
     {
-      path: "/allLinks",
+      path: "/allCategory",
+      component: Category,
+    },
+    {
+      path: "/allCategory/:category",
       component: AllLinks,
     },
     {
-      path: "/openedAccList/PENDING",
-      component: OpenedAccList,
-    },
-    {
-      path: "/openedAccList/COMPLETED",
-      component: OpenedAccList,
-    },
-    {
-      path: "/openedAccList/APPROVED",
+      path: "/openedAccList/:status",
       component: OpenedAccList,
     },
     {

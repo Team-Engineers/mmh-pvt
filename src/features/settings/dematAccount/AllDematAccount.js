@@ -219,7 +219,11 @@ function AllDematAccount() {
   };
 
   const handleExportXLSX = async () => {
-    const baseURL = `${API}/commissions`;
+    let categoryURL = `${API}/commissions/category/${category}`;
+    if (category === "all_products") {
+      categoryURL = `${API}/commissions`;
+    }
+    const baseURL = categoryURL;
     try {
       const response = await axios.get(baseURL);
       if (response.status === 200) {
@@ -262,7 +266,7 @@ function AllDematAccount() {
       </div>
 
       <TitleCard
-        title={`${category.split('_').join(" ")} ${leadData?.length}`}
+        title={`${category.toUpperCase().split("_").join(" ")} ${leadData?.length}`}
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons onExportXLSX={handleExportXLSX} />}
       >

@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { API } from "../../../utils/constants";
 import { sliceLeadDeleted } from "../../leads/leadSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function AllLinks() {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ function AllLinks() {
   const leadDeleted = useSelector((state) => state.lead.leadDeleted);
   const todayDate = new Date();
   const todayDateString = todayDate.toISOString().split("T")[0];
+  const { category } = useParams();
   useEffect(() => {
     const fetchData = async () => {
       const params = {
@@ -22,7 +23,11 @@ function AllLinks() {
         // limit: itemsPerPage,
         // offset: Math.max(0, currentPage - 1) * 10,
       };
-      const baseURL = `${API}/commissions`;
+      let categoryURL = `${API}/commissions/category/${category}`;
+      if (category === "all_products") {
+        categoryURL = `${API}/commissions`;
+      }
+      const baseURL = categoryURL;
       try {
         const response = await axios.get(baseURL, { params: params });
         if (response.status === 200) {
@@ -43,7 +48,7 @@ function AllLinks() {
     };
 
     fetchData();
-  }, [leadDeleted, todayDateString, dispatch]);
+  }, [leadDeleted, todayDateString,category, dispatch]);
 
   const handleFilterChange = (e) => {
     setFilterValue(e.target.value);
@@ -96,7 +101,12 @@ function AllLinks() {
         />
       </div>
 
-      <TitleCard title={`All Accounts ${leadData?.length}`} topMargin="mt-2">
+      <TitleCard
+        title={`${category.toUpperCase().split("_").join(" ")} ${
+          leadData?.length
+        }`}
+        topMargin="mt-2"
+      >
         {filteredLeads?.length === 0 ? (
           <p>No Data Found</p>
         ) : (
