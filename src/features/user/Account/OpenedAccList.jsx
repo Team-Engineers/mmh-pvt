@@ -5,22 +5,11 @@ import axios from "axios";
 import { API } from "../../../utils/constants";
 import { sliceMemberDeleted, sliceMemberStatus } from "../../leads/leadSlice";
 import { format } from "date-fns";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function OpenedAccList() {
-  // const {status} = useParams();
-  let user;
-  const userString = localStorage.getItem("user");
-  if (userString !== null && userString !== undefined) {
-    try {
-      user = JSON.parse(userString);
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      localStorage.clear();
-    }
-  } else {
-    localStorage.clear();
-  }
+  const { status } = useParams();
+
   const dispatch = useDispatch();
   const [teamMember, setTeamMember] = useState([]);
   const [filterValue, setFilterValue] = useState("");
@@ -38,7 +27,7 @@ function OpenedAccList() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const baseURL = `${API}/commissionForm/hr/${user._id}`;
+      const baseURL = `${API}/commissionForm/status/${status}`;
       try {
         const response = await axios.get(baseURL, config);
 
@@ -56,7 +45,7 @@ function OpenedAccList() {
     };
 
     fetchData();
-  }, [memberDeleted, memberStatus, dispatch, user._id]);
+  }, [memberDeleted, memberStatus, dispatch, status]);
 
   const handleFilterChange = (e) => {
     setFilterValue(e.target.value);
@@ -88,7 +77,7 @@ function OpenedAccList() {
         <p>No Data Found</p>
       ) : (
         <TitleCard
-          title={`Total Opened Account ${teamMember?.length}`}
+          title={`Total ${status} Account ${teamMember?.length}`}
           topMargin="mt-2"
         >
           <div className="overflow-x-auto w-full">
