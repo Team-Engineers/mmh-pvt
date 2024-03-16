@@ -11,6 +11,8 @@ import checkAuth from "./app/auth";
 const Layout = lazy(() => import("./containers/Layout"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const ClientPage = lazy(() => import("./pages/ClientPage"));
+
 
 const token = checkAuth();
 
@@ -36,6 +38,7 @@ function App() {
               token ? <Navigate to="/app/welcome" replace /> : <Register />
             }
           />
+          <Route path="/leads/:userId/:commissionId" element={<ClientPage />} />
 
           <Route path="/app/*" element={<Layout />} />
           <Route

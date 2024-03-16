@@ -59,13 +59,6 @@ const SubmitAccount = () => {
     fetchCommissionData();
   }, [id]);
 
-  // useEffect(() => {
-  //   setFormData({
-  //     ...formData,
-  //     name: name,
-  //   });
-  // }, [name, formData, setFormData]);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
