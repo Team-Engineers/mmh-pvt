@@ -27,12 +27,7 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route
-            path="/leads/:userId/:commissionId"
-            element={
-              token ? <Navigate to="/app/welcome" replace /> : <ClientPage />
-            }
-          />
+          <Route path="/leads/:userId/:commissionId" element={<ClientPage />} />
           <Route
             path="/login"
             element={token ? <Navigate to="/app/welcome" replace /> : <Login />}
