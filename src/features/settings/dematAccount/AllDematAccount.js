@@ -18,6 +18,18 @@ import InputText from "../../../components/Input/InputText";
 import { useParams } from "react-router-dom";
 
 function AllDematAccount() {
+  let user;
+  const userString = localStorage.getItem("user");
+  if (userString !== null && userString !== undefined) {
+    try {
+      user = JSON.parse(userString);
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      localStorage.clear();
+    }
+  } else {
+    localStorage.clear();
+  }
   const dispatch = useDispatch();
   const { category } = useParams();
   const [leadData, setLeadData] = useState([]);
@@ -30,18 +42,21 @@ function AllDematAccount() {
     imageLink: "",
     category: "",
   });
-
-  // const leadDetails = JSON.parse(localStorage.getItem("lead-details"));
-  // console.log("lead details from local storage", leadDetails);
   const leadDeleted = useSelector((state) => state.lead.leadDeleted);
   const todayDate = new Date();
   const todayDateString = todayDate.toISOString().split("T")[0];
   useEffect(() => {
     const fetchData = async () => {
-      const params = {
-        // page: currentPage,
-        // limit: itemsPerPage,
-        // offset: Math.max(0, currentPage - 1) * 10,
+      // const params = {
+      //   hrId: user._id,
+      // };
+      const tokenResponse = localStorage.getItem("accessToken");
+      const tokenData = JSON.parse(tokenResponse);
+      const token = tokenData.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       };
       let categoryURL = `${API}/commissions/category/${category}`;
       if (category === "all_products") {
@@ -49,9 +64,8 @@ function AllDematAccount() {
       }
       const baseURL = categoryURL;
       try {
-        const response = await axios.get(baseURL, { params: params });
+        const response = await axios.get(baseURL, config);
         if (response.status === 200) {
-          // console.log("response data of commision", response.data);
           setLeadData(response.data);
         } else {
           console.log("access token incorrect");
@@ -67,7 +81,7 @@ function AllDematAccount() {
     };
 
     fetchData();
-  }, [leadDeleted, todayDateString, category, dispatch]);
+  }, [leadDeleted, todayDateString, category, user._id, dispatch]);
 
   const deleteCurrentLead = (index) => {
     dispatch(
@@ -266,7 +280,9 @@ function AllDematAccount() {
       </div>
 
       <TitleCard
-        title={`${category.toUpperCase().split("_").join(" ")} ${leadData?.length}`}
+        title={`${category.toUpperCase().split("_").join(" ")} ${
+          leadData?.length
+        }`}
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons onExportXLSX={handleExportXLSX} />}
       >

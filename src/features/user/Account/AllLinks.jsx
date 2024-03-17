@@ -16,23 +16,39 @@ function AllLinks() {
   const todayDate = new Date();
   const todayDateString = todayDate.toISOString().split("T")[0];
   const { category } = useParams();
+  let user;
+  const userString = localStorage.getItem("user");
+  if (userString !== null && userString !== undefined) {
+    try {
+      user = JSON.parse(userString);
+      delete user?.password;
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      localStorage.clear();
+    }
+  } else {
+    localStorage.clear();
+  }
+
   useEffect(() => {
     const fetchData = async () => {
+      const tokenResponse = localStorage.getItem("accessToken");
+      const tokenData = JSON.parse(tokenResponse);
+      const token = tokenData.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const params = {
-        // page: currentPage,
-        // limit: itemsPerPage,
-        // offset: Math.max(0, currentPage - 1) * 10,
+        hrId: user._id,
       };
       let categoryURL = `${API}/commissions/category/${category}`;
-      if (category === "all_products") {
-        categoryURL = `${API}/commissions`;
-      }
       const baseURL = categoryURL;
       try {
-        const response = await axios.get(baseURL, { params: params });
+        const response = await axios.get(baseURL, { params: params }, config);
+
         if (response.status === 200) {
-          // console.log("response data of commision", response.data);
-          // localStorage.setItem("lead-details", JSON.stringify(response.data));
           setLeadData(response.data);
         } else {
           console.log("access token incorrect");
@@ -48,7 +64,7 @@ function AllLinks() {
     };
 
     fetchData();
-  }, [leadDeleted, todayDateString,category, dispatch]);
+  }, [leadDeleted, todayDateString, user._id, category, dispatch]);
 
   const handleFilterChange = (e) => {
     setFilterValue(e.target.value);

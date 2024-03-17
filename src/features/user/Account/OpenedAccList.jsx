@@ -9,7 +9,19 @@ import { useParams } from "react-router-dom";
 
 function OpenedAccList() {
   const { status } = useParams();
-
+  let user;
+  const userString = localStorage.getItem("user");
+  if (userString !== null && userString !== undefined) {
+    try {
+      user = JSON.parse(userString);
+      delete user?.password;
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      localStorage.clear();
+    }
+  } else {
+    localStorage.clear();
+  }
   const dispatch = useDispatch();
   const [teamMember, setTeamMember] = useState([]);
   const [filterValue, setFilterValue] = useState("");
@@ -27,9 +39,12 @@ function OpenedAccList() {
           Authorization: `Bearer ${token}`,
         },
       };
+      const params = {
+        hrId: user._id,
+      };
       const baseURL = `${API}/commissionForm/status/${status}`;
       try {
-        const response = await axios.get(baseURL, config);
+        const response = await axios.get(baseURL, { params: params },  config);
 
         setTeamMember(response.data);
       } catch (error) {
@@ -45,7 +60,7 @@ function OpenedAccList() {
     };
 
     fetchData();
-  }, [memberDeleted, memberStatus, dispatch, status]);
+  }, [memberDeleted, memberStatus,user._id, dispatch, status]);
 
   const handleFilterChange = (e) => {
     setFilterValue(e.target.value);
