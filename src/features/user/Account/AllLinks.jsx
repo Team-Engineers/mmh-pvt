@@ -77,11 +77,10 @@ function AllLinks() {
     );
   });
 
-  const handleShareLink = async (link) => {
+  const handleShareLink = async (linkId) => {
     navigator.clipboard
-      .writeText(link)
+      .writeText(`https://makemoneyfromhome.app/${user._id}/${linkId}`)
       .then(() => {
-        // Do something after successfully copying the text
         console.log("Link copied successfully");
       })
       .catch((error) => {
@@ -92,14 +91,11 @@ function AllLinks() {
       if (navigator.share) {
         await navigator.share({
           title: document.title,
-          text: link,
+          text: `https://makemoneyfromhome.app/${user._id}/${linkId}`,
           url: window.location.href,
         });
-        console.log("Link shared successfully");
       } else {
         console.log("Web Share API not supported");
-        // Fallback for unsupported browsers
-        // You can provide your custom implementation for sharing here
       }
     } catch (error) {
       console.error("Error sharing link:", error);
@@ -165,7 +161,7 @@ function AllLinks() {
                           <button
                             className="btn px-6 btn-sm normal-case btn-success"
                             onClick={() => {
-                              handleShareLink(l.link);
+                              handleShareLink(l._id);
                             }}
                           >
                             Share
