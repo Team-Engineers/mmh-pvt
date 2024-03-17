@@ -28,6 +28,12 @@ function App() {
       <Router>
         <Routes>
           <Route
+            path="/leads/:userId/:commissionId"
+            element={
+              token ? <Navigate to="/app/welcome" replace /> : <ClientPage />
+            }
+          />
+          <Route
             path="/login"
             element={token ? <Navigate to="/app/welcome" replace /> : <Login />}
           />
@@ -35,12 +41,6 @@ function App() {
             path="/register"
             element={
               token ? <Navigate to="/app/welcome" replace /> : <Register />
-            }
-          />
-          <Route
-            path="/leads/:userId/:commissionId"
-            element={
-              token ? <Navigate to="/app/welcome" replace /> : <ClientPage />
             }
           />
 
