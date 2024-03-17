@@ -3,32 +3,32 @@
 @tailwind utilities;
 
 .loading-indicator:before {
-    content: '';
-    background: #00000080;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-  
-  .loading-indicator:after {
-    content: ' ';
-    position: fixed;
-    top: 45%;
-    left: 45%;
-    z-index: 10010;
-    color:white;
-    text-align:center;
-    font-weight:bold;
-    font-size:1.2rem;        
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #0474bf; /* Blue */
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    animation: spin 2s linear infinite;
+  content: "";
+  background: #00000080;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.loading-indicator:after {
+  content: " ";
+  position: fixed;
+  top: 45%;
+  left: 45%;
+  z-index: 10010;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #0474bf; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
 }
 
 /* Media query for tablets and mobile devices */
@@ -44,7 +44,6 @@
   }
 }
 
-
 .sort-asc::after {
   content: " ↑";
   display: inline-block;
@@ -59,15 +58,19 @@
   font-size: 14px;
 }
 
-
 .table th:first-child {
   position: relative;
 }
 
-td{
+td {
   text-align: center;
 }
 
-th{
+th {
   text-align: center;
+}
+
+.btn-group > .first-letter\:btninput[type="radio"]::first-letter,
+:before {
+  content: none;
 }

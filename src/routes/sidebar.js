@@ -130,7 +130,7 @@ if (user?.approvedAt && !isAdmin && user?.role?.includes("TL")) {
   );
 }
 
-if (isAdmin) {
+if (isAdmin && user?.role?.includes("ADMIN")) {
   routes.push(
     {
       path: "/app/totalAssignedLeads",
@@ -235,6 +235,20 @@ if (isAdmin) {
       path: "/app/closedLeads",
       icon: <FireIcon className={iconClasses} />,
       name: "Closed Leads",
+    }
+  );
+} else if (user?.role?.includes("VENDOR")) {
+  routes.push(
+    {
+      path: "/app/allCategory",
+      icon: <BuildingOffice2Icon className={submenuIconClasses} />,
+      name: "All Category",
+    },
+
+    {
+      path: "/app/addAccount",
+      icon: <FolderPlusIcon className={submenuIconClasses} />,
+      name: "Add Account",
     }
   );
 }

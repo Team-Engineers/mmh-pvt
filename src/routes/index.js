@@ -55,6 +55,10 @@ const AllDematAccount = lazy(() =>
   import("../features/settings/dematAccount/AllDematAccount")
 );
 
+const EditBankDetails = lazy(() =>
+  import("../features/settings/dematAccount/EditBankDetails")
+);
+
 const Category = lazy(() =>
   import("../features/settings/dematAccount/Category")
 );
@@ -113,7 +117,7 @@ const routes = [
   },
 ];
 
-if (isAdmin) {
+if (isAdmin && user?.role?.includes("ADMIN")) {
   routes.push(
     {
       path: "/reset-password",
@@ -262,6 +266,26 @@ if (isAdmin) {
       path: "/activeMembers",
       component: PresentHR,
     }
+  );
+} else if (user?.role?.includes("VENDOR")) {
+  routes.push(
+    {
+      path: "/allCategory",
+      component: Category,
+    },
+    {
+      path: "/allCategory/:category",
+      component: AllDematAccount,
+    },
+    {
+      path: "/edit/:commissionId",
+      component: EditBankDetails,
+    },
+    
+    {
+      path: "/addAccount",
+      component: DematAccount,
+    },
   );
 }
 

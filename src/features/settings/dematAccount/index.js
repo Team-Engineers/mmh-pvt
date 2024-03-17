@@ -1,11 +1,11 @@
 import { useState } from "react";
 // import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import ErrorText from "../../../components/Typography/ErrorText";
 import InputText from "../../../components/Input/InputText";
 import { showNotification } from "../../common/headerSlice";
 import axios from "axios";
 import { API } from "../../../utils/constants";
+import TitleCard from "../../../components/Cards/TitleCard";
 
 function DematAccount() {
   const INITIAL_ACCOUNT_OBJ = {
@@ -14,27 +14,51 @@ function DematAccount() {
     commission: "",
     imageLink: "",
     category: "default",
+    linkStatus: "ACTIVE",
   };
 
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [accountObj, setAccountObj] = useState(INITIAL_ACCOUNT_OBJ);
   const dispatch = useDispatch();
   // let userId = "";
 
   const submitForm = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
-    if (accountObj.name.trim() === "")
-      return setErrorMessage("Name is required!");
-    if (accountObj.link.trim() === "")
-      return setErrorMessage("Link is required!");
-    if (accountObj.commission.trim() === "")
-      return setErrorMessage("Commission is required!");
-    if (accountObj.category === "default")
-      return setErrorMessage("Category is required!");
-    else {
-      setLoading(true);
+    if (accountObj.name.trim() === "") {
+      dispatch(
+        showNotification({
+          message: "Account Name is required!",
+          status: 0,
+        })
+      );
+      return;
+    }
+    if (accountObj.link.trim() === "") {
+      dispatch(
+        showNotification({
+          message: "Link is required!",
+          status: 0,
+        })
+      );
+      return;
+    }
+    if (accountObj.commission.toString().trim() === "") {
+      dispatch(
+        showNotification({
+          message: "Commission is required!",
+          status: 0,
+        })
+      );
+      return;
+    }
+    if (accountObj.category === "default") {
+      dispatch(
+        showNotification({
+          message: "Category is required.",
+          status: 0,
+        })
+      );
+      return;
+    } else {
       accountObj.name = accountObj.name.replace(/\s/g, "");
       accountObj.link = accountObj.link.replace(/\s/g, "");
       accountObj.commission = accountObj.commission.replace(/\s/g, "");
@@ -74,12 +98,10 @@ function DematAccount() {
           })
         );
       }
-      setLoading(false);
     }
   };
 
   const updateFormValue = ({ updateType, value }) => {
-    setErrorMessage("");
     setAccountObj({ ...accountObj, [updateType]: value });
   };
 
@@ -89,82 +111,81 @@ function DematAccount() {
   };
 
   return (
-    <div className="min-h-screen  bg-base-200 flex items-center">
-      <div className="card mx-auto max-w-xl w-full  shadow-xl">
-        <div className="grid grid-cols-1  bg-base-100 rounded-xl">
-          <div className="py-8 px-10">
-            <h2 className="text-2xl font-semibold mb-2 text-center">
-              Add Account
-            </h2>
-            <form onSubmit={(e) => submitForm(e)}>
-              <div className="mb-4">
-                <InputText
-                  defaultValue={accountObj.name}
-                  updateType="name"
-                  containerStyle="mt-4"
-                  labelTitle="Name"
-                  updateFormValue={updateFormValue}
-                />
+    <>
+      <TitleCard title="Fill Account Details" topMargin="mt-2">
+        <form onSubmit={(e) => submitForm(e)}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputText
+              defaultValue={accountObj.name}
+              updateType="name"
+              containerStyle="mt-4"
+              labelTitle="Account Name"
+              updateFormValue={updateFormValue}
+            />
 
-                <InputText
-                  defaultValue={accountObj.link}
-                  updateType="link"
-                  containerStyle="mt-4"
-                  labelTitle="Link"
-                  updateFormValue={updateFormValue}
-                />
-                <InputText
-                  defaultValue={accountObj.commission}
-                  type="commission"
-                  updateType="commission"
-                  containerStyle="mt-4"
-                  labelTitle="Commission"
-                  updateFormValue={updateFormValue}
-                />
+            <InputText
+              defaultValue={accountObj.link}
+              updateType="link"
+              containerStyle="mt-4"
+              labelTitle="Account Link"
+              updateFormValue={updateFormValue}
+            />
+            <InputText
+              defaultValue={accountObj.commission}
+              type="commission"
+              updateType="commission"
+              containerStyle="mt-4"
+              labelTitle="Commission"
+              updateFormValue={updateFormValue}
+            />
 
-                <div>
-                  <label className="label">Category</label>
-                  <select
-                    name="category"
-                    updateType="category"
-                    className="input input-bordered w-full pe-2"
-                    onChange={handleInputChange}
-                  >
-                    <option value="default" selected disabled>
-                      Select Category
-                    </option>
-                    <option value="SAVINGS_ACCOUNT">Saving Account</option>
-                    <option value="SPECIAL_PRODUCTS">Special Product</option>
-                    <option value="DEMAT_ACCOUNT">Demat Account</option>
-                  </select>
-                </div>
-
-                <InputText
-                  defaultValue={accountObj.imageLink}
-                  type="imageLink"
-                  updateType="imageLink"
-                  containerStyle="mt-4"
-                  labelTitle="Image Link"
-                  updateFormValue={updateFormValue}
-                />
-              </div>
-
-              <ErrorText styleClass="mt-8">{errorMessage}</ErrorText>
-              <button
-                type="submit"
-                className={
-                  "btn mt-2 w-full btn-primary" + (loading ? " loading" : "")
-                }
+            <div>
+              <label className="label mt-4">Category</label>
+              <select
+                name="category"
+                updateType="category"
+                className="input input-bordered w-full pe-2"
+                onChange={handleInputChange}
+                value={accountObj.category}
               >
-                Submit
-              </button>
-
-              {/* <div className='text-center mt-4'>Already have an account? <Link to="/login"><span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">Login</span></Link></div> */}
-            </form>
+                <option value="default" selected disabled>
+                  Select Category
+                </option>
+                <option value="SAVINGS_ACCOUNT">Saving Account</option>
+                <option value="SPECIAL_PRODUCTS">Special Product</option>
+                <option value="DEMAT_ACCOUNT">Demat Account</option>
+              </select>
+            </div>
+            <div>
+              <label className="label mt-3">Status</label>
+              <select
+                name="linkStatus"
+                updateType="linkStatus"
+                className="input input-bordered w-full pe-2"
+                onChange={handleInputChange}
+                value={accountObj.linkStatus}
+              >
+                <option value="ACTIVE">Active</option>
+                <option value="HOLD">Hold</option>
+              </select>
+            </div>
+            <InputText
+              defaultValue={accountObj.imageLink}
+              type="imageLink"
+              updateType="imageLink"
+              containerStyle="mt-4"
+              labelTitle="Image Link"
+              updateFormValue={updateFormValue}
+            />
           </div>
-        </div>
-      </div>
-    </div>
+          <div className="mt-4">
+            <button className="btn btn-primary float-right" type="submit">
+              Submit
+            </button>
+          </div>
+        </form>
+      </TitleCard>
+    </>
   );
 }
 

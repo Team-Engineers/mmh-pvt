@@ -12,10 +12,8 @@ import {
   CONFIRMATION_MODAL_CLOSE_TYPES,
   MODAL_BODY_TYPES,
 } from "../../../utils/globalConstantUtil";
-import { showNotification } from "../../common/headerSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
-import InputText from "../../../components/Input/InputText";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function AllDematAccount() {
   let user;
@@ -34,14 +32,6 @@ function AllDematAccount() {
   const { category } = useParams();
   const [leadData, setLeadData] = useState([]);
   const [filterValue, setFilterValue] = useState("");
-  const [currentlyEditing, setCurrentlyEditing] = useState(null);
-  const [editedData, setEditedData] = useState({
-    name: "",
-    commission: "",
-    link: "",
-    imageLink: "",
-    category: "",
-  });
   const leadDeleted = useSelector((state) => state.lead.leadDeleted);
   const todayDate = new Date();
   const todayDateString = todayDate.toISOString().split("T")[0];
@@ -108,90 +98,6 @@ function AllDematAccount() {
       lead?.commission?.toString().includes(filterValue)
     );
   });
-
-  const toggleEdit = (index) => {
-    setEditedData({
-      name: filteredLeads[index].name,
-      commission: filteredLeads[index].commission,
-      link: filteredLeads[index].link,
-      imageLink: filteredLeads[index].imageLink,
-    });
-
-    setCurrentlyEditing((prevIndex) => (prevIndex === index ? null : index));
-  };
-
-  const handleSaveEdit = async (leadId, index) => {
-    try {
-      // Validate edited data (you can add more validation as needed)
-      if (
-        !editedData.name ||
-        !editedData.commission ||
-        !editedData.link ||
-        !editedData.imageLink ||
-        editedData.category === "default"
-      ) {
-        dispatch(
-          showNotification({
-            message: "All fields are required.",
-            status: 0,
-          })
-        );
-        return;
-      }
-      const tokenResponse = localStorage.getItem("accessToken");
-      const tokenData = JSON.parse(tokenResponse);
-      const token = tokenData.token;
-
-      // Set the Authorization header with the token
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const updatedLead = {
-        name: editedData.name,
-        commission: editedData.commission,
-        link: editedData.link,
-        imageLink: editedData.imageLink,
-        category: editedData.category,
-      };
-
-      await axios.put(`${API}/commissions/${leadId}`, updatedLead, config);
-      dispatch(sliceLeadDeleted(true));
-
-      dispatch(
-        showNotification({
-          message: "Account updated successfully!",
-          status: 1,
-        })
-      );
-
-      // Clear the edited values and toggle off editing mode
-      setEditedData({ name: "", commission: "", link: "", imageLink: "" });
-      setCurrentlyEditing(null);
-    } catch (error) {
-      if (error.response.status === 409) {
-        localStorage.clear();
-        window.location.href = "/login";
-      } else {
-        dispatch(
-          showNotification({
-            message: "Error updating Account. Please try again.",
-            status: 0,
-          })
-        );
-      }
-    }
-  };
-
-  const updateFormValue = ({ updateType, value }) => {
-    setEditedData({ ...editedData, [updateType]: value });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedData({ ...editedData, [name]: value });
-  };
 
   const convertDataToXLSX = (data) => {
     const ws = XLSX.utils.json_to_sheet(data);
@@ -300,6 +206,8 @@ function AllDematAccount() {
                     <th>Name</th>
 
                     <th>Commission</th>
+                    <th>Status</th>
+
                     <th>Account Link</th>
                     <th>Category</th>
                     <th>Image Link</th>
@@ -325,115 +233,49 @@ function AllDematAccount() {
                             ? format(new Date(l?.createdAt), "dd/MM/yyyy")
                             : "N/A"}
                         </td>
-                        <td style={{ maxWidth: "7rem" }}>
-                          {currentlyEditing === k ? (
-                            <InputText
-                              defaultValue={editedData.name}
-                              updateType="name"
-                              //   containerStyle="mt-4"
-                              updateFormValue={updateFormValue}
-                            />
-                          ) : (
-                            l.name
-                          )}
+                        <td style={{ maxWidth: "7rem" }}>{l.name}</td>
+
+                        <td style={{ maxWidth: "7rem" }}>{l.commission}</td>
+                        <td>
+                          <button
+                            className={`btn text-black btn-ghost ${
+                              l.linkStatus === "ACTIVE"
+                                ? "bg-success "
+                                : "bg-rose-500"
+                            }`}
+                          >
+                            {l.linkStatus}
+                          </button>
                         </td>
-                        <td style={{ maxWidth: "7rem" }}>
-                          {currentlyEditing === k ? (
-                            <InputText
-                              defaultValue={editedData.commission}
-                              updateType="commission"
-                              //   containerStyle="mt-4"
-                              updateFormValue={updateFormValue}
-                            />
-                          ) : (
-                            l.commission
-                          )}
-                        </td>
+
                         <td style={{ maxWidth: "7rem" }}>
                           <div className="max-w-6 overflow-hidden truncate">
-                            {currentlyEditing === k ? (
-                              <InputText
-                                defaultValue={editedData.link}
-                                updateType="link"
-                                //   containerStyle="mt-4"
-                                updateFormValue={updateFormValue}
-                              />
-                            ) : (
-                              l.link
-                            )}
+                            {l.link}
                           </div>
                         </td>
-                        <td style={{ maxWidth: "10rem" }}>
-                          <div className="overflow-hidden truncate">
-                            {currentlyEditing === k ? (
-                              <select
-                                name="category"
-                                updateType="category"
-                                className="input input-bordered w-full pe-2"
-                                value={editedData.category?.toUpperCase()} // Set initial value to uppercase
-                                onChange={handleInputChange}
-                              >
-                                <option value="default" disabled>
-                                  Select Category
-                                </option>
-                                <option value="SAVINGS_ACCOUNT">
-                                  Savings Account
-                                </option>
-                                <option value="SPECIAL_PRODUCTS">
-                                  Special Product
-                                </option>
-                                <option value="DEMAT_ACCOUNT">
-                                  Demat Account
-                                </option>
-                              </select>
-                            ) : (
-                              l.category.toUpperCase() // Display uppercase category if not editing
-                            )}
-                          </div>
-                        </td>
+                        <td>{l.category.split("_").join(" ")}</td>
 
                         <td style={{ maxWidth: "7rem" }}>
                           <div className=" overflow-hidden truncate">
-                            {currentlyEditing === k ? (
-                              <InputText
-                                defaultValue={editedData.imageLink}
-                                updateType="imageLink"
-                                updateFormValue={updateFormValue}
-                              />
-                            ) : (
-                              l.imageLink
-                            )}
+                            {l.imageLink}
                           </div>
                         </td>
-
-                        {/* <td>{l.assigneeStatus}</td> */}
                         <td>
                           <div className="flex item-center justify-between">
-                            {currentlyEditing !== k ? (
-                              <button
-                                className="btn btn-square btn-ghost"
-                                onClick={() => deleteCurrentLead(l._id)}
-                              >
-                                <TrashIcon className="w-5" />
-                              </button>
-                            ) : (
-                              ""
-                            )}
+                            <button
+                              className="btn btn-square btn-ghost"
+                              onClick={() => deleteCurrentLead(l._id)}
+                            >
+                              <TrashIcon className="w-5" />
+                            </button>
+
                             <div className="flex gap-3 items-center justify-center">
-                              {currentlyEditing === k && (
-                                <button
-                                  className="btn btn-square btn-ghost"
-                                  onClick={() => handleSaveEdit(l._id, k)}
-                                >
-                                  SAVE
-                                </button>
-                              )}
-                              <button
+                              <Link
                                 className="btn btn-square btn-ghost"
-                                onClick={() => toggleEdit(k)}
+                                to={`/app/edit/${l._id}`}
                               >
-                                {currentlyEditing === k ? "Cancel" : "Edit"}
-                              </button>
+                                {"Edit"}
+                              </Link>
                             </div>
                           </div>
                         </td>

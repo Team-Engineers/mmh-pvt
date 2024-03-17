@@ -32,7 +32,7 @@ function LeftSidebar() {
               src={logo}
               alt="MMH Logo"
             />
-            Make Money From Home
+            MMH
           </Link>{" "}
         </li>
         {routes.map((route, k) => {

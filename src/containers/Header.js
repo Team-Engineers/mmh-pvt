@@ -95,6 +95,7 @@ function Header() {
           `${API}/employee/?id=${storedUserData._id}`
         );
         localStorage.setItem("user", JSON.stringify(response.data.data[0]));
+        localStorage.setItem("isAdmin", JSON.stringify(response.data.data[0].isAdmin));
         delete response?.data?.data[0]?.password;
       } catch (error) {
         if (error.response.status === 409) {

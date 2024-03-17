@@ -33,7 +33,9 @@ function TemplatePointers() {
         console.error("Error fetching user data:", error);
       }
     };
-    fetchUserData();
+    if (!user?.isAdmin) {
+      fetchUserData();
+    }
   }, []);
 
   return (
@@ -41,9 +43,34 @@ function TemplatePointers() {
       {TOKEN ? (
         user?.isAdmin ? (
           <>
-            <h1 className="text-2xl mt-8 font-bold">Admin Dashboard</h1>
+            <h1 className="text-2xl mb-8 font-bold">
+              {" "}
+              Welcome to Admin Dashboard !
+            </h1>
+            <img
+              src={
+                "https://e1.pxfuel.com/desktop-wallpaper/177/512/desktop-wallpaper-system-admins-admin-thumbnail.jpg"
+              }
+              alt="admin img"
+            />
+            <div>
+              {user.role.includes("ADMIN") ? (
+                <Link to="/app/totalAssignedLeads">
+                  <button className="btn btn-primary float-right">
+                    Get Started
+                  </button>
+                </Link>
+              ) : null}
+              {user.role.includes("VENDOR") ? (
+                <Link to="/app/allCategory">
+                  <button className="btn btn-primary mt-4 flex justify-center">
+                    Get Started
+                  </button>
+                </Link>
+              ) : null}
+            </div>
 
-            <div className="mt-8">
+            {/* <div className="mt-8">
               <h2 className="text-lg font-bold">Lead Assignment</h2>
               <p className="text-base">
                 Assign leads to employees and manage lead distribution
@@ -84,7 +111,7 @@ function TemplatePointers() {
               <Link to="/app/uploadLeads" className="text-blue-500 underline">
                 Upload Leads
               </Link>
-            </div>
+            </div> */}
           </>
         ) : user?.approvedAt ? (
           <>
