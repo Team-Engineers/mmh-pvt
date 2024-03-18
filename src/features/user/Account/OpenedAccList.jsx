@@ -39,12 +39,10 @@ function OpenedAccList() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const params = {
-        hrId: user._id,
-      };
-      const baseURL = `${API}/commissionForm/status/${status}`;
+      let baseURL = `${API}/commissionForm/status/${status}`;
+      baseURL = baseURL + `?hrId=${user._id}`;
       try {
-        const response = await axios.get(baseURL, { params: params },  config);
+        const response = await axios.get(baseURL, config);
 
         setTeamMember(response.data);
       } catch (error) {

@@ -40,14 +40,11 @@ function AllLinks() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const params = {
-        hrId: user._id,
-      };
       let categoryURL = `${API}/commissions/category/${category}`;
-      const baseURL = categoryURL;
+      let baseURL = categoryURL;
+      baseURL = baseURL + `?hrId=${user._id}`;
       try {
-        const response = await axios.get(baseURL, { params: params }, config);
-
+        const response = await axios.get(baseURL, config);
         if (response.status === 200) {
           setLeadData(response.data);
         } else {
@@ -78,8 +75,9 @@ function AllLinks() {
   });
 
   const handleShareLink = async (linkId) => {
+    console.log("linkId", linkId);
     navigator.clipboard
-      .writeText(`https://makemoneyfromhome.app/${user._id}/${linkId}`)
+      .writeText(`https://makemoneyfromhome.app/leads/${user._id}/${linkId}`)
       .then(() => {
         console.log("Link copied successfully");
       })
@@ -91,8 +89,9 @@ function AllLinks() {
       if (navigator.share) {
         await navigator.share({
           title: document.title,
-          text: `https://makemoneyfromhome.app/${user._id}/${linkId}`,
-          url: window.location.href,
+          text: `https://makemoneyfromhome.app/leads/${user._id}/${linkId}`,
+          url: `https://makemoneyfromhome.app/leads/${user._id}/${linkId}`,
+          // url: `http://localhost:3000/leads/${user._id}/${linkId}`,
         });
       } else {
         console.log("Web Share API not supported");

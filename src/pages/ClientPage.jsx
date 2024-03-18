@@ -37,8 +37,8 @@ const ClientPage = () => {
     const fetchCommissionData = async () => {
       try {
         const response = await axios.get(`${API}/commissions/${commissionId}`);
-        console.log("commisssion data is ", response.data);
         setCommissionData(response.data);
+        console.log("commission data in response ", response.data);
         setAccountImg(response.data.imageLink);
       } catch (error) {
         if (error.response.status === 409) {
@@ -77,7 +77,10 @@ const ClientPage = () => {
     setFormData({ ...formData, [updateType]: value });
   };
 
+  const redirectLink = commissionData.link;
+
   const submitForm = async (e) => {
+    console.log("form data is", formData);
     e.preventDefault();
     setErrorMessage("");
     if (formData?.customerName?.trim() === "")
@@ -120,8 +123,9 @@ const ClientPage = () => {
             status: 1,
           })
         );
-        window.location.replace(`/${commissionData.link}`);
+        
         setFormData(INITIAL_COMMISSION_OBJ);
+        window.location.href =redirectLink ;
       } else {
         dispatch(
           showNotification({
