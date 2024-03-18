@@ -55,14 +55,14 @@ function TemplatePointers() {
             />
             <div>
               {user.role.includes("ADMIN") ? (
-                <Link to="/app/totalAssignedLeads">
-                  <button className="btn btn-primary float-right">
+                <Link className="flex justify-center" to="/app/totalAssignedLeads">
+                  <button className="btn btn-primary mt-4 justify-center">
                     Get Started
                   </button>
                 </Link>
               ) : null}
               {user.role.includes("VENDOR") ? (
-                <Link to="/app/allCategory">
+                <Link className="flex justify-center" to="/app/allCategory">
                   <button className="btn btn-primary mt-4 flex justify-center">
                     Get Started
                   </button>

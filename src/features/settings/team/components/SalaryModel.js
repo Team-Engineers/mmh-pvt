@@ -24,7 +24,7 @@ function SalaryModel({ extraObject, closeModal }) {
   } = extraObject;
 
   const INITIAL_PAYMENT_OBJ = {
-    userId: userId,
+    hrId : userId,
     amount: amount,
     bankName: bankName,
     branchName: branchName,

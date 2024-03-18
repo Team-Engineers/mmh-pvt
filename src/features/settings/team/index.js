@@ -152,7 +152,8 @@ function TeamMembers() {
     accountHolderName,
     upiId,
     hrName,
-    hrContact
+    hrContact,
+    hrId
   ) => {
     // console.log("tlid and HRid initially from ", tlId, hrId);
     dispatch(
@@ -173,6 +174,7 @@ function TeamMembers() {
           upiId: upiId,
           hrName: hrName,
           hrContact: hrContact,
+          hrId : hrId
         },
       })
     );
@@ -576,7 +578,7 @@ function TeamMembers() {
                                 l.bankDetails?.accountHolderName,
                                 l.bankDetails?.upiId,
                                 l.name,
-                                l.contact
+                                l.contact,
                               )
                             }
                             className="btn btn-primary  normal-case btn-sm"

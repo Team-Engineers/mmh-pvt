@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { API } from "../../../utils/constants";
 import { sliceLeadDeleted } from "../../leads/leadSlice";
 import TitleCard from "../../../components/Cards/TitleCard";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function AllLinks() {
   const dispatch = useDispatch();
@@ -47,13 +47,11 @@ function AllLinks() {
         const response = await axios.get(baseURL, config);
         if (response.status === 200) {
           const filteredActiveLeads = response.data.filter(
-            (lead) => lead.status === "ACTIVE"
+            (lead) => lead.linkStatus === "ACTIVE"
           );
-
+          console.log(response.data, "response.data")
           // Assuming setLeadData is a function to set the leads
           setLeadData(filteredActiveLeads);
-
-          setLeadData(response.data);
         } else {
           console.log("access token incorrect");
         }

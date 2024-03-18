@@ -208,7 +208,7 @@ function Header() {
               </div>
               <Link
                 className="bg-base-300 w-2/3 gap-1 btn btn-ghost btn-circle"
-                to="/app/approvedAccount"
+                to="/app/openedAccList/APPROVED"
               >
                 <div>
                   <WalletIcon className="h-6 inline-block w-6" />
