@@ -204,7 +204,11 @@ if (isAdmin && user?.role?.includes("ADMIN")) {
     {
       path: "/notApproved",
       component: NotApprovedMembers,
-    }
+    },
+    {
+      path: "/edit/:commissionId",
+      component: EditBankDetails,
+    },
   );
 } else if (user?.role?.includes("HR")) {
   routes.push(

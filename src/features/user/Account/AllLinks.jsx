@@ -46,6 +46,13 @@ function AllLinks() {
       try {
         const response = await axios.get(baseURL, config);
         if (response.status === 200) {
+          const filteredActiveLeads = response.data.filter(
+            (lead) => lead.status === "ACTIVE"
+          );
+
+          // Assuming setLeadData is a function to set the leads
+          setLeadData(filteredActiveLeads);
+
           setLeadData(response.data);
         } else {
           console.log("access token incorrect");
@@ -134,7 +141,6 @@ function AllLinks() {
                     <th>Commission</th>
                     <th>Account Link</th>
 
-                    <th className="text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,15 +171,6 @@ function AllLinks() {
                           >
                             Share
                           </button>
-                        </td>
-                        {/* <td>{l.assigneeStatus}</td> */}
-                        <td>
-                          <Link
-                            to={`/app/createForm/${l._id}`}
-                            className="btn px-6 btn-sm normal-case btn-primary"
-                          >
-                            Submit Account
-                          </Link>
                         </td>
                       </tr>
                     );
