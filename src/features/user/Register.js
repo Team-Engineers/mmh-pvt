@@ -45,7 +45,7 @@ function Register() {
       registerObj.contact = registerObj.contact.replace(/\s/g, "");
       try {
         const response = await axios.post(`${API}/auth/signup`, registerObj);
-        if (response.status === 200) {
+        if (response.status === 201) {
           dispatch(
             showNotification({ message: "Registered Successfully!", status: 1 })
           );
