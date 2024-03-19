@@ -55,7 +55,7 @@ function Register() {
       } catch (error) {
         dispatch(
           showNotification({
-            message: `${error.response.data.message}`,
+            message: `${error.response.message}`,
             status: 0,
           })
         );
