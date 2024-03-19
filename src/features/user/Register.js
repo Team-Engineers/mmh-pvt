@@ -5,9 +5,9 @@ import ErrorText from "../../components/Typography/ErrorText";
 import InputText from "../../components/Input/InputText";
 import axios from "axios";
 import { API } from "../../utils/constants";
-import { useDispatch } from "react-redux";
-import { showNotification } from "../common/headerSlice";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const INITIAL_REGISTER_OBJ = {
@@ -19,7 +19,6 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [registerObj, setRegisterObj] = useState(INITIAL_REGISTER_OBJ);
-  const dispatch = useDispatch();
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -46,19 +45,11 @@ function Register() {
       try {
         const response = await axios.post(`${API}/auth/signup`, registerObj);
         if (response.status === 201) {
-          dispatch(
-            showNotification({ message: "Registered Successfully!", status: 1 })
-          );
-
           window.location.href = "/login";
+          toast.success(`Registered Successfully!`);
         }
       } catch (error) {
-        dispatch(
-          showNotification({
-            message: `${error.response.message}`,
-            status: 0,
-          })
-        );
+        toast.error(`${error.response.data.message}`);
       }
     }
   };
@@ -89,6 +80,7 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center">
+      <ToastContainer />
       <div className="card mx-auto w-full max-w-5xl  shadow-xl">
         <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
           <div className="hidden md:block">
